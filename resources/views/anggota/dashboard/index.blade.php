@@ -1,0 +1,1 @@
+@extends('anggota.layouts.master')
