@@ -45,7 +45,7 @@ class BukuController extends Controller
                 })
                 ->addColumn('action', function ($data) {
 
-                    $button = '<a href="/anggota/ebook/' . $data->id . '/show"  class="btn btn-primary btn-xs"><i class="fa fa-book"></I></a>';
+                    $button = '<a href="/anggota/ebook/' . $data->id . '/show"  class="btn btn-primary btn-xs"><i class="fa fa-book"></I>Baca</a>';
                     return $button;
                 })->addColumn('gambar', function ($data) {
                     $gambar = '<img src="' . $data->getGambar() . '"" width="100" height="100"

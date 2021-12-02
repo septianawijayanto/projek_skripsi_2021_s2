@@ -64,8 +64,9 @@ class AnggotaController extends Controller
     }
     public function print()
     {
+        $tgl = date('d F Y');
         $data = Anggota::all();
-        $pdf = PDF::loadview('admin.anggota.print', compact('data'))->setPaper('a4', 'Landscape');
+        $pdf = PDF::loadview('admin.anggota.print', compact('data', 'tgl'))->setPaper('a4', 'Landscape');
         return $pdf->stream();
     }
 }

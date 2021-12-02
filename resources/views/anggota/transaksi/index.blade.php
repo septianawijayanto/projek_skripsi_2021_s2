@@ -7,7 +7,7 @@
         </div>
         <div class="panel-body">
             <button type="button" class="btn btn-warning btn-xs btn-refresh"><i class="fa fa-refresh"></i></button>
-            <button id="tombol-tambah" type="button" class="btn btn-primary btn-xs"><i class="fa fa-plus"></i></button>
+            {{-- <button id="tombol-tambah" type="button" class="btn btn-primary btn-xs"><i class="fa fa-plus"></i></button> --}}
         </div>
         <div class="panel-body">
             <div class="table-responsive">

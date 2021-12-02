@@ -37,7 +37,7 @@
     <li><a href="{{ route('laporan') }}" class=""><i class="lnr lnr-dice"></i>
             <span>Laporan</span></a>
     </li>
-    <li>
+    {{-- <li>
         <a href="#pengaturan" data-toggle="collapse" class="collapsed"><i class="fa fa-gear"></i>
             <span>Pengaturan</span> <i class="icon-submenu lnr lnr-chevron-left"></i></a>
         <div id="pengaturan" class="collapse ">
@@ -46,7 +46,7 @@
                         pSekolah</a></li>
             </ul>
         </div>
-    </li>
+    </li> --}}
     <li><a href="{{ url('logout') }}" class=""><i class="lnr lnr-exit"></i> <span>Keluar</span></a>
     </li>
 

@@ -100,8 +100,9 @@ class BukuController extends Controller
     }
     public function print()
     {
+        $tgl = date('d F Y');
         $data = Buku::all();
-        $pdf = PDF::loadview('admin.buku.print', compact('data'))->setPaper('a4', 'Landscape');
+        $pdf = PDF::loadview('admin.buku.print', compact('data', 'tgl'))->setPaper('a4', 'Landscape');
         return $pdf->stream();
     }
 }
