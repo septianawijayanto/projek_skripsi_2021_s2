@@ -18,8 +18,8 @@ class CreateTransaksiTable extends Migration
             $table->string('kode_transaksi', 15);
             $table->foreignId('buku_id')->references('id')->on('buku')->onDelete('cascade');
             $table->foreignId('anggota_id')->references('id')->on('anggota')->onDelete('cascade');
-            $table->dateTime('tgl_pinjam');
-            $table->dateTime('tgl_kembali');
+            $table->date('tgl_pinjam');
+            $table->date('tgl_kembali');
             $table->string('status', 8);
             $table->string('status_denda', 20);
             $table->integer('denda')->nullable();

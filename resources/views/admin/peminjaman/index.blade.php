@@ -40,12 +40,12 @@
                 <div class="modal-header">
                     <h5 class="modal-title" id="modal-judul"></h5>
                 </div>
-
                 <div class="modal-body">
                     <form id="form-tambah-edit" enctype="multipart/form-data">
                         <div class="form-group ">
                             <input name="id" id="id" required type="hidden" class="form-control" value="">
                         </div>
+
                         <div class="form-group ">
                             <label for="exampleFormControlInput1">Koda transaksi</label>
                             <input name="kode_transaksi" id="kode_transaksi" required type="text" class="form-control"
@@ -102,6 +102,7 @@
         </div>
     </div>
     <!-- AKHIR MODAL -->
+
 @endsection
 @section('scripts')
 
@@ -177,7 +178,6 @@
                                     '<option hidden>--Pilih Judul Buku--</option>');
                                 $.each(data, function(id, judul_buku) {
                                     $('#buku').append(new Option(judul_buku, id))
-
                                 });
                             } else {
                                 $('#buku').empty();
@@ -188,7 +188,6 @@
                     $('#buku').empty();
                 }
             });
-
 
             // //Level
             $("#level").on('change', function() {
@@ -220,7 +219,6 @@
                 }
             });
 
-
             // Tombol Tambah
             $('#tombol-tambah').click(function() {
                 $('#tombol-simpan').val('create-post');
@@ -230,15 +228,12 @@
                 $('#modal-tambah-edit').modal('show')
             });
 
-
-
             //Simpan dan Edit STore
             if ($('#form-tambah-edit').length > 0) {
                 $('#form-tambah-edit').validate({
                     submitHandler: function(form) {
                         var actionType = $('#tombol-simpan').val();
                         $('#tombol-simpan').html('Menyimpan ...');
-
                         $.ajax({
                             data: $('#form-tambah-edit').serialize(),
                             url: "{{ route('transaksi.store') }}",
@@ -261,22 +256,19 @@
                 })
             }
 
-            // //ketika class edit-post yang ada pada tag body di klik maka
-            // $('body').on('click', '.perpanjang', function() {
+            // //Tmb Perpanjang
+            // $('body').on('click', '.btn-perpanjang', function() {
             //     var data_id = $(this).data('id');
-            //     $.get('transaksi/perpanjang/' + data_id, function(data) {
-            //         $('#modal-judul').html("Edit Data Anggota");
-            //         $('#tombol-simpan').html("Rubah");
+            //     $.get('transaksi/' + data_id + '/perpanjang', function(data) {
+            //         $('#judul').html('Perpanjang');
+
+            //         $('#tombol-simpan').html(' Perpanjang');
             //         $('#modal-tambah-edit').modal('show');
 
-            //         //set value masing-masing id berdasarkan data yg diperoleh dari ajax get request diatas               
             //         $('#id').val(data.id);
-            //         $('#kode_transaksi').hide();;
-            //         $('#level').hide();
-            //         $('#anggota').hide();
-            //         $('#klasifikasi').hide();
-            //         $('#buku').hide();
-            //         $('#tgl_pinjam').hide();
+            //         $('#level').val(data.level)
+            //         $('#judul_buku').val(data.judul_buku);
+            //         $('#kode_transaksi').val(data.kode_transaksi);
             //         $('#tgl_kembali').val(data.tgl_kembali);
             //     })
             // });

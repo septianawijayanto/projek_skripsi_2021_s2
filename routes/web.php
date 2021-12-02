@@ -85,7 +85,7 @@ Route::group(['middleware' => 'admin'], function () {
         Route::post('transaksi', [TransaksiController::class, 'store'])->name('transaksi.store');
         Route::get('nama_buku/{id}', [TransaksiController::class, 'nama_buku']);
         Route::get('nama_anggota/{id}', [TransaksiController::class, 'nama_anggota']);
-        Route::get('transaksi/perpanjang/{id}', [TransaksiController::class, 'perpanjang']);
+        Route::get('transaksi/{id}/perpanjang', [TransaksiController::class, 'perpanjang']);
 
 
         //Transaksi Pengembalian
@@ -98,7 +98,8 @@ Route::group(['middleware' => 'admin'], function () {
 
         //Denda
         Route::get('denda', [DendaController::class, 'index'])->name('denda');
-        Route::get('denda/{id}', [DendaController::class, 'lunasi']);
+        Route::get('denda/{id}/lunasi', [DendaController::class, 'lunasi']);
+        Route::get('denda/{id}/cetak', [DendaController::class, 'cetak']);
 
         // Sekolah
         Route::get('sekolah', [SekolahController::class, 'index'])->name('sekolah');
@@ -115,17 +116,10 @@ Route::group(['middleware' => 'anggota'], function () {
     Route::prefix('anggota')->group(function () {
         Route::get('dashboard', [AnggotaDashboardController::class, 'index'])->name('dashboard.index');
 
-        Route::get('t-peminjaman', [MelihatTransaksiController::class, 'index'])->name('transaksi.peminjaman');
-        Route::get('t-peminjaman/ajax', [MelihatTransaksiController::class, 'ajax'])->name('transaksi.peminjaman.ajax');
-        Route::post('t-peminjaman/store', [MelihatTransaksiController::class, 'coba'])->name('transaksi.peminjaman.store');
-
-        Route::get('buku_id/{id}', [MelihatTransaksiController::class, 'buku_id']);
-
-        Route::get('peminjaman', [PeminjamanController::class, 'index'])->name('peminjaman');
+        Route::get('peminjaman', [PeminjamanController::class, 'index'])->name('peminjaman.index');
         Route::get('peminjaman/ajax', [PeminjamanController::class, 'ajax'])->name('peminjaman.ajax');
         Route::post('peminjaman/store', [PeminjamanController::class, 'store'])->name('peminjaman.store');
-        Route::get('peminjaman/buku/{id}', [PeminjamanController::class, 'buku']);
-
+        Route::get('judul-buku/{id}', [PeminjamanController::class, 'judulbuku']);
 
         Route::get('t-denda', [MelihatTransaksiController::class, 'tdenda'])->name('transaksi.denda');
         Route::get('buku', [AnggotaBukuController::class, 'bindex'])->name('buku.index');

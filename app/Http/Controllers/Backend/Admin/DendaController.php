@@ -5,13 +5,14 @@ namespace App\Http\Controllers\Backend\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Model\Transaksi;
 use Illuminate\Http\Request;
+use PDF;
 
 class DendaController extends Controller
 {
     public function index(Request $request)
     {
         $title = 'Denda';
-        $list_transaksi = Transaksi::where('status_denda', 'denda')->get();
+        $list_transaksi = Transaksi::whereIn('status_denda', ['Belum Lunas', 'Lunas'])->get();
         if ($request->ajax()) {
             return datatables()->of($list_transaksi)->addIndexColumn()
                 ->addColumn('status_denda', function ($data) {
@@ -30,16 +31,19 @@ class DendaController extends Controller
                     return $data->buku->judul_buku;
                 })
                 ->addColumn('action', function ($data) {
-                    $button = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $data->id . '" data-original-title="Edit" class="btn btn-warning btn-xs edit-post"><i class="lnr lnr-pencil"></i> </a>';
-                    // $button .= '&nbsp;';
-                    // $button .= '<a href="/transaksi/' . $data->id . '/kembali" type="button" name="kembalikan"  class="kembalikan btn btn-primary btn-xs"><i class="lnr lnr-trash"></i></a>';
-                    return $button;
+                    if ($data->status_denda == 'Belum Lunas') {
+                        $button = '<a href="/admin/denda/' . $data->id . '/lunasi" type="button" name="kembalikan"  class="kembalikan btn btn-success btn-xs"><i class="fa fa-money"></i></a>';
+                        return $button;
+                    } else {
+                        $button = '<a href="/admin/denda/' . $data->id . '/cetak" type="button" name="kembalikan"  class="kembalikan btn btn-warning btn-xs"><i class="fa fa-print"></i></a>';
+                        return $button;
+                    }
                 })
                 ->addColumn('tgl_kembali', function ($data) {
-                    return date('d F Y, H:i', strtotime($data->tgl_kembali));
+                    return date('d F Y', strtotime($data->tgl_kembali));
                 })
                 ->addColumn('tgl_pinjam', function ($data) {
-                    return date('d F Y, H:i', strtotime($data->tgl_pinjam));
+                    return date('d F Y', strtotime($data->tgl_pinjam));
                 })
                 ->addColumn('denda', function ($data) {
                     return '<span class="label label-danger">' . 'Rp ' . number_format($data->denda, 0) . ' <i class="fa fa-times">' . '</span>';
@@ -48,5 +52,19 @@ class DendaController extends Controller
                 ->make(true);
         }
         return view('admin.denda.index', compact('title'));
+    }
+    public function lunasi($id)
+    {
+        Transaksi::findOrFail($id);
+        Transaksi::where('id', $id)->update(['status_denda' => 'Lunas']);
+        return redirect()->back()->with('sukses', 'Denda Berhasi dilunasi');
+    }
+    public function cetak($id)
+    {
+        $tgl = date('d F Y');
+        // $tgl = date('F - d - y');
+        $data = Transaksi::find($id);
+        $pdf = PDF::loadview('admin.denda.kwitansi', compact('data', 'tgl'))->setPaper('a5', 'landscape');
+        return $pdf->stream('kwitansi' . date('Y-m-d_H:i:s') . '.pdf');
     }
 }

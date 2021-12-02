@@ -28,7 +28,7 @@
                         <div class="overlay"></div>
                         <div class="content text">
                             <h1 class="heading">Sistem Informasi Perpustakaan</h1>
-                            <p>SMP Negeri 9 Tebo</p>
+                            <p>SMP Negeri 26 Kabupaten Tebo</p>
                         </div>
                     </div>
                     <div class="clearfix"></div>

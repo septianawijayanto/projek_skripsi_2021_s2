@@ -16,8 +16,9 @@ class LaporanController extends Controller
     }
     public function laporan()
     {
+        $tgl = date('d F Y');
         $data = Transaksi::all();
-        $pdf = PDF::loadview('admin.laporan.pdf', compact('data'))->setPaper('a4', 'Landscape');
+        $pdf = PDF::loadview('admin.laporan.pdf', compact('data', 'tgl'))->setPaper('a4', 'Landscape');
         return $pdf->stream();
     }
 }

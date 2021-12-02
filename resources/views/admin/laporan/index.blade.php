@@ -16,12 +16,12 @@
                     style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 30px, 0px);">
                     <a href="{{ route('laporan.all') }}" class="dropdown-item"> Transaksi Semua</a>
                     <br>
-                    <a href="{{ url('admin/laporan/peminjamanpdf?status=pinjam') }}" class="dropdown-item"> Transaksi
+                    {{-- <a href="{{ url('admin/laporan/peminjamanpdf?status=pinjam') }}" class="dropdown-item"> Transaksi
                         Dipinjam</a>
                     <br>
                     <a href="{{ url('admin/laporan/peminjamanpdf?status=kembali') }}" class="dropdown-item"> Transaksi
                         Pengembalian</a>
-                    <br>
+                    <br> --}}
                     {{-- <a href="{{ url('admin/laporan/peminjamanpdf?status=rusak') }}" class="dropdown-item">Transaksi
                         Rusak</a>
                     <br>

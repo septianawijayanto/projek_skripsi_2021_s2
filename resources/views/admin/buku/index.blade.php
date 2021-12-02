@@ -239,13 +239,13 @@
                         $('#form-tambah-edit').trigger("reset");
                         $('#modal-tambah-edit').modal('hide');
                         $('#tombol-simpan').html('Save Changes');
-                        var oTable = $('#table_ebook').dataTable();
+                        var oTable = $('#table_buku').dataTable();
                         oTable.fnDraw(false);
                         toastr.success('Data Berhasil Disimpan');
                     },
                     error: function(data) {
                         console.log('Error:', data);
-                        $('#btn-save').html('Save Changes');
+                        $('#tombol-simpan').html('Save Changes');
                     }
                 });
             });

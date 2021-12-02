@@ -16,7 +16,7 @@ class TransaksiController extends Controller
     public function index()
     {
         $title = 'Transaksi Peminjaman';
-        $buku = Buku::get();
+        $buku = Buku::where('jumlah', '>', 0)->get();
         $klasifikasi = Klasifikasi::get();
         $level = Level::get();
         $anggota = Anggota::get();
@@ -35,6 +35,9 @@ class TransaksiController extends Controller
                     } elseif ($data->status == 'kembali') {
                         $badge =   '<span class="label label-success">' . $data->status . '</span>';
                         return   $badge;
+                    } else {
+                        $badge =   '<span class="label label-danger">' . $data->status . '</span>';
+                        return   $badge;
                     }
                 })
                 ->addColumn('nama', function ($data) {
@@ -45,32 +48,30 @@ class TransaksiController extends Controller
                 })
                 ->addColumn('action', function ($data) {
 
-                    $button = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $data->id . '" data-original-title="Perpanjang" class="btn btn-warning btn-xs perpanjang"><i class="lnr lnr-pencil"></i> </a>';
-                    return $button;
+                    // $button = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $data->id . '" data-original-title="Perpanjang" class="btn btn-warning btn-xs perpanjang"> Perpanjang</a>';
+                    // $button = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $data->id . '" data-original-title="Edit" class="btn btn-warning btn-xs btn-perpanjang"><i class="lnr lnr-pencil"></i> </a>';
+                    if ($data->status == 'pinjam') {
+                        $button = '<a href="/admin/transaksi/' . $data->id . '/perpanjang" type="button" name="kembalikan"  class="kembalikan btn btn-warning btn-xs">Perpanjang</a>';
+                        return $button;
+                    }
                 })
                 ->addColumn('tgl_kembali', function ($data) {
-                    return date('d F Y, H:i', strtotime($data->tgl_kembali));
+                    return date('d F Y', strtotime($data->tgl_kembali));
                 })
                 ->addColumn('tgl_pinjam', function ($data) {
-                    return date('d F Y, H:i', strtotime($data->tgl_pinjam));
+                    return date('d F Y', strtotime($data->tgl_pinjam));
                 })
                 ->addColumn(
                     'denda',
                     function ($data) {
                         $tgl_balek = $data->tgl_kembali;
-                        $tgl2 = Carbon::now();
-                        if ($data->status == 'kembali') {
-                            if ($tgl_balek >= $tgl2) {
-                                return '<span class="label label-primary"> <i class="fa fa-check"></span>';
+                        $tgl2 = today();
+                        $selisih = $tgl2->diffInDays($tgl_balek);
+                        if ($tgl_balek < $tgl2) {
+                            if ($data->status == 'pinjam') {
+                                return '<span class="label label-danger">' . 'Rp ' . number_format($selisih * 1000, 0) . ' </span>';
                             } else {
-                                return '<span class="label label-danger">' . 'Rp ' . number_format($data->denda, 0) . ' <i class="fa fa-times">' . '</span>';
-                            }
-                        } else {
-                            if ($tgl_balek >= $tgl2) {
-                                return '<span class="label label-primary"> <i class="fa fa-check"></span>';
-                            } else {
-                                $selisih = $tgl2->diffInDays($tgl_balek);
-                                return '<span class="label label-danger">' . 'Rp ' . number_format($selisih * 1000, 0) . ' <i class="fa fa-times">' . '</span>';
+                                return '<span class="label label-danger">' . 'Rp ' . number_format($data->denda, 0) . ' </span>';
                             }
                         }
                     }
@@ -92,7 +93,6 @@ class TransaksiController extends Controller
         // } else {
         //     return  redirect()->back()->with('gagal', 'Peminjaman Maksimal');
         // }
-
         $post = Transaksi::Create(
             [
                 'kode_transaksi' => $request->kode_transaksi,
@@ -125,7 +125,7 @@ class TransaksiController extends Controller
     public function nama_buku($id)
     {
         // $buku = Buku::where('klasifikasi_id', $id)->get();
-        $buku = Buku::where('klasifikasi_id', $id)->pluck('judul_buku', 'id');
+        $buku = Buku::where('jumlah', '>', 0)->where('klasifikasi_id', $id)->pluck('judul_buku', 'id');
         return response()->json($buku);
     }
     public function nama_anggota($id)
@@ -135,7 +135,12 @@ class TransaksiController extends Controller
     }
     public function perpanjang($id)
     {
-        $post = Transaksi::where('id', $id)->first();
-        return response()->json($post);
+        $data = Transaksi::find($id);
+        Transaksi::where('id', $id)->update([
+            'tgl_kembali' => date('Y-m-d', strtotime(Carbon::today()->addDays(7)->toDateString())),
+        ]);
+        return redirect()->back()->with('sukses', 'Peminjaman Berhasil Diperpanjang');
+        // $data = Transaksi::where('id', $id)->first();
+        // return response()->json($data);
     }
 }

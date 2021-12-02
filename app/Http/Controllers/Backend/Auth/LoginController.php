@@ -52,9 +52,9 @@ class LoginController extends Controller
             if ($data) {
                 if (Hash::check($password, $data->password)) {
                     Session::put('id', $data->id);
+                    Session::put('level_id',$data->level->level);
                     Session::put('nama', $data->nama);
                     Session::put('username' . $data->username);
-                    Session::put('level', $data->level);
                     Session::put('tgl_lahir', $data->tgl_lahir);
                     Session::put('agama', $data->agama);
                     Session::put('alamat', $data->alamat);

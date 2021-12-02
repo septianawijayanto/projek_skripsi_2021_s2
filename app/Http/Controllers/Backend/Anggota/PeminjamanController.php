@@ -30,6 +30,9 @@ class PeminjamanController extends Controller
                     } elseif ($data->status == 'kembali') {
                         $badge =   '<span class="label label-success">' . $data->status . '</span>';
                         return   $badge;
+                    } else {
+                        $badge =   '<span class="label label-danger">' . $data->status . '</span>';
+                        return   $badge;
                     }
                 })
                 ->addColumn('nama', function ($data) {
@@ -48,23 +51,35 @@ class PeminjamanController extends Controller
                 ->make(true);
         }
     }
-    public function buku($id)
+    public function judulbuku($id)
     {
         $buku = Buku::where('klasifikasi_id', $id)->pluck('judul_buku', 'id');
         return response()->json($buku);
     }
     public function store(Request $request)
     {
-        $post = Transaksi::create([
-            'kode_transaksi' => $request->kode_transaksi,
-            'buku_id' => $request->buku,
-            'anggota_id' => Session::get('id'),
-            'tgl_pinjam' => $request->tgl_pinjam,
-            'tgl_kembali' => $request->tgl_kembali,
-            'status' => 'boking',
-            'status_denda' => 0,
-            'denda' => 0,
-        ]);
-        return response()->json($post);
+        $cek = Transaksi::whereIn('status', ['pinjam', 'boking'])->where('anggota_id', Session::get('id'))->count();
+        if ($cek < 2) {
+
+            if (Transaksi::where('anggota_id', Session::get('id'))->where('buku_id', $request->get('buku_id'))->whereIn('status', ['pinjam', 'boking'])->exists()) {
+                return response()->json(['error' => 'Eror']);
+            } else {
+                $post = [
+                    'kode_transaksi' => $request->kode_transaksi,
+                    'anggota_id' => Session::get('id'),
+                    'buku_id' => $request->buku,
+                    'tgl_pinjam' => $request->tgl_pinjam,
+                    'tgl_kembali' => $request->tgl_kembali,
+                    'status' => 'boking',
+                    'status_denda' => 0,
+                    'denda' => 0,
+
+                ];
+                $data = Transaksi::create($post);
+                return response()->json($data);
+            }
+        } else {
+            return response()->json(['error' => 'Eror']);
+        }
     }
 }

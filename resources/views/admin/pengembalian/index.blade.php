@@ -30,6 +30,45 @@
             </div>
         </div>
     </div>
+    <!-- MULAI MODAL Rusak Hilang-->
+    <div class="modal fade" id="modal-rusak-hilang" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modal-judul"></h5>
+                </div>
+
+                <div class="modal-body">
+                    <form id="form-rusak-hilang" enctype="multipart/form-data">
+                        <div class="form-group ">
+                            <input name="id" id="id" required type="hidden" class="form-control" value="">
+                        </div>
+                        <div class="form-group ">
+                            <label for="kode_transaksi">Kode Transaksi</label>
+                            <input name="kode_transaksi" id="kode_transaksi" readonly type="text" class="form-control"
+                                placeholder="Input Kode Transaksi" value="">
+                        </div>
+                        <div class="form-group ">
+                            <label for="exampleFormControlInput1">Denda Awal</label>
+                            <input name="denda" id="denda" required type="text" class="form-control"
+                                placeholder="Input Denda Awal" value="">
+                        </div>
+                        <div class="form-group ">
+                            <label for="exampleFormControlInput1">Denda</label>
+                            <input name="denda" id="denda" required type="text" class="form-control"
+                                placeholder="Input Denda" value="">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary fa fa-close" data-dismiss="modal"> Tutup</button>
+                            <button type="submit" id="tombol-simpan" value="create" class="btn btn-primary fa fa-save">
+                                Simpan</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- AKHIR MODAL -->
 @endsection
 @section('scripts')
@@ -91,6 +130,33 @@
 
             //     });
             // });
+
+            //Tmb Rusak
+            $('body').on('click', '.btn-rusak', function() {
+                var data_id = $(this).data('id');
+                $.get('pengembalian/' + data_id + '/rusak', function(data) {
+                    $('#modal-judul').html('Input Denda Rusak');
+                    // $('#tombol-simpan').val('btn-rusak');
+                    $('#tombol-simpan').html(' Simpan');
+                    $('#modal-rusak-hilang').modal('show');
+                    $('#id').val(data.id);
+                    $('#kode_transaksi').val(data.kode_transaksi);
+                    $('#denda').val(data.denda);
+                })
+            });
+
+            //Tmb Hilang
+            $('body').on('click', '.btn-hilang', function() {
+                var hilang_id = $(this).data('id');
+                $.get('pengembalian/' + hilang_id + '/hilang', function(data) {
+                    $('#modal-judul').html('Input Denda Hilang');
+                    $('#tombol-simpan').html(' Simpan');
+                    $('#modal-rusak-hilang').modal('show');
+                    $('#id').val(data.id);
+                    $('#kode_transaksi').val(data.kode_transaksi);
+                    $('#denda').val(data.denda);
+                })
+            });
 
             // btn refresh
             $('.btn-refresh').click(function(e) {

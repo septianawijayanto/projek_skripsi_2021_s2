@@ -31,7 +31,7 @@
         </div>
     </div>
     <!-- MULAI MODAL FORM TAMBAH/EDIT-->
-    <div class="modal fade" id="modal-tambah" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+    <div class="modal fade" id="modal-tambah-edit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -40,8 +40,10 @@
                 </div>
 
                 <div class="modal-body">
-                    <form id="form-tambah" enctype="multipart/form-data">
-
+                    <form id="form-tambah-edit" enctype="multipart/form-data">
+                        {{-- <div class="form-group ">
+                            <input name="id" id="id" type="hidden" class="form-control" value="">
+                        </div> --}}
                         <div class="form-group ">
                             <label for="exampleFormControlInput1">Koda transaksi</label>
                             <input name="kode_transaksi" id="kode_transaksi" required type="text" class="form-control"
@@ -59,6 +61,7 @@
                         <div class="form-group">
                             <label for="buku_id">Judul Buku</label>
                             <select name="buku" id="buku" class="form-control" required>
+                                {{-- <option value="">-Pilih-</option> --}}
                             </select>
                         </div>
                         <div class="form-group ">
@@ -74,7 +77,7 @@
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal"><i
                                     class="fa fa-close"></i> Tutup</button>
-                            <button type="submit" id="btn-save" value="create" class="btn btn-primary"><i
+                            <button type="submit" id="tombol-simpan" value="create" class="btn btn-primary"><i
                                     class="fa fa-save"></i> Simpan</button>
                         </div>
                     </form>
@@ -83,7 +86,6 @@
         </div>
     </div>
     <!-- AKHIR MODAL -->
-
 @endsection
 @section('scripts')
     <script type="text/javascript">
@@ -92,7 +94,7 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: "{{ route('transaksi.peminjaman.ajax') }}",
+                    url: "{{ route('peminjaman.ajax') }}",
                     type: "GET"
                 },
                 columns: [{
@@ -121,6 +123,11 @@
                     [0, 'DESC']
                 ]
             });
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            })
 
             //Klasifikasi
             $("#klasifikasi").on('change', function() {
@@ -128,7 +135,7 @@
                 if (klasifikasi_id) {
                     $.ajax({
                         type: "GET",
-                        url: "buku_id/" + klasifikasi_id,
+                        url: "judul-buku/" + klasifikasi_id,
                         // data: {
                         //     "_token": "{{ csrf_token() }}"
                         // },
@@ -154,45 +161,7 @@
                     $('#buku').empty();
                 }
             });
-            // Tombol Tambah
-            $('#tombol-tambah').click(function() {
-                $('#btn-save').val('create-post');
-                $('#id').val('');
-                $('#form-tambah').trigger('reset');
-                $('#modal-judul').html('Tambah Data transaksi');
-                $('#modal-tambah').modal('show')
-            });
 
-
-
-            //Simpan dan Edit STore
-            if ($('#form-tambah').length > 0) {
-                $('#form-tambah').validate({
-                    submitHandler: function(form) {
-                        var actionType = $('#btn-save').val();
-                        $('#btn-save').html('Menyimpan ...');
-
-                        $.ajax({
-                            data: $('#form-tambah').serialize(),
-                            url: "{{ route('transaksi.peminjaman.store') }}",
-                            type: "POST",
-                            dataType: 'json',
-                            success: function(data) {
-                                $('#form-tambah').trigger('reset');
-                                $('#modal-tambah').modal('hide');
-                                $('#btn-save').html('Simpan');
-                                var oTable = $('#table_transaksi').dataTable();
-                                oTable.fnDraw(false);
-                                toastr.success('Data Peminjaman Berhasil Disimpan');
-                            },
-                            error: function(data) {
-                                console.log('Eror', data);
-                                $('#btn-save').html('Simpan');
-                            }
-                        })
-                    }
-                })
-            }
 
             // btn refresh
             $('.btn-refresh').click(function(e) {
@@ -200,6 +169,46 @@
                 $('.preloader').fadeIn();
                 location.reload();
             })
+
+
+            // Tombol Tambah
+            $('#tombol-tambah').click(function() {
+                $('#tombol-simpan').val('create-post');
+                $('#id').val('');
+                $('#form-tambah-edit').trigger('reset');
+                $('#modal-judul').html('Tambah Data transaksi');
+                $('#modal-tambah-edit').modal('show')
+            });
+
+
+            $('body').on('submit', '#form-tambah-edit', function(e) {
+                e.preventDefault();
+                var actionType = $('#tombol-simpan').val();
+                $('#tombol-simpan').html('Menyimpan..');
+                var formData = new FormData(this);
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ route('peminjaman.store') }}",
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: (data) => {
+                        $('#form-tambah-edit').trigger("reset");
+                        $('#modal-tambah-edit').modal('hide');
+                        $('#tombol-simpan').html('Save Changes');
+                        var oTable = $('#table_transaksi').dataTable();
+                        oTable.fnDraw(false);
+                        toastr.success('Data Berhasil Disimpan');
+                    },
+                    error: function(data) {
+                        console.log('Error:', data);
+                        // $('#tombol-simpan').html('Save Changes');
+                        toastr.error('Error:', data);
+
+                    }
+                });
+            });
 
         });
     </script>

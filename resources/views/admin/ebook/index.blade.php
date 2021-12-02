@@ -222,7 +222,7 @@
                     },
                     error: function(data) {
                         console.log('Error:', data);
-                        $('#btn-save').html('Save Changes');
+                        $('#tombol-simpan').html('Save Changes');
                     }
                 });
             });
