@@ -16,18 +16,18 @@
                     style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 30px, 0px);">
                     <a href="{{ route('laporan.all') }}" class="dropdown-item"> Transaksi Semua</a>
                     <br>
-                    {{-- <a href="{{ url('admin/laporan/peminjamanpdf?status=pinjam') }}" class="dropdown-item"> Transaksi
+                    <a href="{{ url('admin/laporan/print?status=pinjam') }}" class="dropdown-item"> Transaksi
                         Dipinjam</a>
                     <br>
-                    <a href="{{ url('admin/laporan/peminjamanpdf?status=kembali') }}" class="dropdown-item"> Transaksi
+                    <a href="{{ url('admin/laporan/print?status=kembali') }}" class="dropdown-item"> Transaksi
                         Pengembalian</a>
-                    <br> --}}
-                    {{-- <a href="{{ url('admin/laporan/peminjamanpdf?status=rusak') }}" class="dropdown-item">Transaksi
+                    <br>
+                    <a href="{{ url('admin/laporan/print?status=rusak') }}" class="dropdown-item">Transaksi
                         Rusak</a>
                     <br>
-                    <a href="{{ url('admin/laporan/peminjamanpdf?status=hilang') }}" class="dropdown-item"> Transaksi
+                    <a href="{{ url('admin/laporan/print?status=hilang') }}" class="dropdown-item"> Transaksi
                         Hilang</a>
-                    <br> --}}
+                    <br>
                     {{-- <a href="!#" class="dropdown-item btn-priodepdf" data-toggle="modal" data-target="#modal">Transaksi
                         Periode</a>
                     <br> --}}

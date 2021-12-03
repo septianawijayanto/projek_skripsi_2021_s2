@@ -107,6 +107,7 @@ Route::group(['middleware' => 'admin'], function () {
         //Laporan
         Route::get('laporan', [LaporanController::class, 'index'])->name('laporan');
         Route::get('laporan/all', [LaporanController::class, 'laporan'])->name('laporan.all');
+        Route::get('laporan/print', [LaporanController::class, 'print'])->name('laporan.print');
     });
 });
 

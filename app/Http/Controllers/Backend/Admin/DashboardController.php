@@ -16,13 +16,13 @@ class DashboardController extends Controller
         $title = 'Dashboard Admin';
 
 
-        $level = Level::first();
+        // $level = Level::get();
         $pinjam = Transaksi::where('status', 'pinjam')->count();
-
         $selesai = Transaksi::where('status', 'kembali')->count();
-        $anggota = Anggota::where('level_id', $level->id)->count();
-        $guru = Anggota::where('level_id', $level->id)->count();
-        $staf = Anggota::where('level_id', $level->id)->count();
+
+        $anggota = Anggota::where('level_id',  1)->count();
+        $guru = Anggota::where('level_id', 2)->count();
+        $staf = Anggota::where('level_id', 3)->count();
         $buku = Buku::count();
         return view('admin.dashboard.index', compact('title', 'anggota', 'buku', 'pinjam', 'selesai', 'guru'));
     }
