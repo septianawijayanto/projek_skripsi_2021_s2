@@ -60,9 +60,11 @@ class PeminjamanController extends Controller
     {
         $cek = Transaksi::whereIn('status', ['pinjam', 'boking'])->where('anggota_id', Session::get('id'))->count();
         if ($cek < 2) {
-
-            if (Transaksi::where('anggota_id', Session::get('id'))->where('buku_id', $request->get('buku_id'))->whereIn('status', ['pinjam', 'boking'])->exists()) {
-                return response()->json(['error' => 'Eror']);
+            if (Transaksi::where('anggota_id', Session::get('id'))->where('buku_id', $request->get('buku'))->whereIn('status', ['pinjam', 'boking'])->exists()) {
+                return response()->json([
+                    'error' => true,
+                    'message' => 'Buku Sudah Dipinjam',
+                ]);
             } else {
                 $post = [
                     'kode_transaksi' => $request->kode_transaksi,
@@ -75,11 +77,17 @@ class PeminjamanController extends Controller
                     'denda' => 0,
 
                 ];
-                $data = Transaksi::create($post);
-                return response()->json($data);
+                Transaksi::create($post);
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Peminjaman Berhasil ditambah',
+                ]);
             }
         } else {
-            return response()->json(['error' => 'Eror']);
+            return response()->json([
+                'error' => true,
+                'message' => 'Peminjaman Telah Maksimal',
+            ]);
         }
     }
 }

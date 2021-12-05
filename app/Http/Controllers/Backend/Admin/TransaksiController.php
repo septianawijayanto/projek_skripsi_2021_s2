@@ -83,39 +83,47 @@ class TransaksiController extends Controller
 
     public function store(Request $request)
     {
-        // $cek = Transaksi::where('status', 'pinjam')->where('anggota_id', $request->get('anggota_id'))->count();
-        // if ($cek < 2) {
-
-        //     if (Transaksi::where('anggota_id', $request->get('anggota_id'))->where('buku_id', $request->get('buku_id'))->where('status', 'pinjam')->exists()) {
-        //         return redirect()->back()->with('gagal', 'Buku Telah dipinjam');
-        //     } else {
-        //     }
-        // } else {
-        //     return  redirect()->back()->with('gagal', 'Peminjaman Maksimal');
-        // }
-        $post = Transaksi::Create(
-            [
-                'kode_transaksi' => $request->kode_transaksi,
-                'anggota_id' => $request->anggota,
-                'buku_id' => $request->buku,
-                'tgl_pinjam' => $request->tgl_pinjam,
-                'tgl_kembali' => $request->tgl_kembali,
-                'status' => 'pinjam',
-                'status_denda' => 0,
-                'denda' => 0,
-            ]
-        );
-        $idbuku = $post->buku_id;
-        $buku = Buku::find($idbuku);
-        $saiki = $buku->jumlah;
-        $anyar = $saiki - 1;
-        $dijilh = $buku->jml_dipinjam;
-        $jmlsaiki = $dijilh + 1;
-        Buku::where('id', $idbuku)->update([
-            'jumlah' => $anyar,
-            'jml_dipinjam' => $jmlsaiki,
-        ]);
-        return response()->json($post);
+        $cek = Transaksi::whereIn('status', ['pinjam', 'boking'])->where('anggota_id', $request->get('anggota'))->count();
+        if ($cek < 2) {
+            if (Transaksi::where('anggota_id', $request->get('anggota'))->where('buku_id', $request->get('buku'))->whereIn('status', ['pinjam', 'boking'])->exists()) {
+                return response()->json([
+                    'error' => true,
+                    'message' => 'Buku Sudah Dipinjam',
+                ]);
+            } else {
+                $post = Transaksi::Create(
+                    [
+                        'kode_transaksi' => $request->kode_transaksi,
+                        'anggota_id' => $request->anggota,
+                        'buku_id' => $request->buku,
+                        'tgl_pinjam' => $request->tgl_pinjam,
+                        'tgl_kembali' => $request->tgl_kembali,
+                        'status' => 'pinjam',
+                        'status_denda' => 0,
+                        'denda' => 0,
+                    ]
+                );
+                $idbuku = $post->buku_id;
+                $buku = Buku::find($idbuku);
+                $saiki = $buku->jumlah;
+                $anyar = $saiki - 1;
+                $dijilh = $buku->jml_dipinjam;
+                $jmlsaiki = $dijilh + 1;
+                Buku::where('id', $idbuku)->update([
+                    'jumlah' => $anyar,
+                    'jml_dipinjam' => $jmlsaiki,
+                ]);
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Peminjaman Berhasil ditambah',
+                ]);
+            }
+        } else {
+            return response()->json([
+                'error' => true,
+                'message' => 'Peminjaman Telah Maksimal',
+            ]);
+        }
     }
     public function edit($id)
     {

@@ -199,13 +199,16 @@
                         $('#tombol-simpan').html('Save Changes');
                         var oTable = $('#table_transaksi').dataTable();
                         oTable.fnDraw(false);
-                        toastr.success('Data Berhasil Disimpan');
+                        if (data.success === true) {
+                            toastr.success("Done!", data.message, "success");
+                        } else {
+                            toastr.error("Error!", data.message, "error");
+                        }
                     },
                     error: function(data) {
                         console.log('Error:', data);
                         // $('#tombol-simpan').html('Save Changes');
                         toastr.error('Error:', data);
-
                     }
                 });
             });
