@@ -64,16 +64,18 @@ class PengembalianController extends Controller
                 })->addColumn(
                     'denda',
                     function ($data) {
-                    $tgl_balek = $data->tgl_kembali;
-                    $tgl2 = today();
-                    $selisih = $tgl2->diffInDays($tgl_balek);
-                    if ($tgl_balek < $tgl2) {
-                        if ($data->status == 'pinjam') {
-                            return '<span class="label label-danger">' . 'Rp ' . number_format($selisih * 1000, 0) . ' </span>';
+                        $tgl_balek = $data->tgl_kembali;
+                        $tgl2 = today();
+                        $selisih = $tgl2->diffInDays($tgl_balek);
+                        if ($tgl_balek < $tgl2) {
+                            if ($data->status == 'pinjam') {
+                                return '<span class="label label-danger">' . 'Rp ' . number_format($selisih * 1000, 0) . ' </span>';
+                            } else {
+                                return '<span class="label label-danger">' . 'Rp ' . number_format($data->denda, 0) . ' </span>';
+                            }
                         } else {
                             return '<span class="label label-danger">' . 'Rp ' . number_format($data->denda, 0) . ' </span>';
                         }
-                    }
                     }
                 )
                 ->rawColumns(['status', 'nama', 'judul_buku', 'aksi', 'tgl_kembali', 'tgl_pinjam', 'denda'])

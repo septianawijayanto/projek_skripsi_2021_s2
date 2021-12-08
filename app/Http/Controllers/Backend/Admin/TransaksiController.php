@@ -16,12 +16,36 @@ class TransaksiController extends Controller
     public function index()
     {
         $title = 'Transaksi Peminjaman';
+
+        $kode = "TR00001";
+
+        $getRow = Transaksi::orderBy('id', 'DESC')->get();
+        $rowCount = $getRow->count();
+
+        $lastId = $getRow->first();
+
+        $kode = "TR00001";
+
+        if ($rowCount > 0) {
+            if ($lastId->id < 9) {
+                $kode = "TR0000" . '' . ($lastId->id + 1);
+            } else if ($lastId->id < 99) {
+                $kode = "TR000" . '' . ($lastId->id + 1);
+            } else if ($lastId->id < 999) {
+                $kode = "TR00" . '' . ($lastId->id + 1);
+            } else if ($lastId->id < 9999) {
+                $kode = "TR0" . '' . ($lastId->id + 1);
+            } else {
+                $kode = "TR" . '' . ($lastId->id + 1);
+            }
+        }
+
         $buku = Buku::where('jumlah', '>', 0)->get();
         $klasifikasi = Klasifikasi::get();
         $level = Level::get();
         $anggota = Anggota::get();
 
-        return view('admin.peminjaman.index', compact('title', 'buku', 'anggota', 'klasifikasi', 'level'));
+        return view('admin.peminjaman.index', compact('title', 'buku', 'anggota', 'klasifikasi', 'level', 'kode'));
     }
     public function ajax(Request $request)
     {
@@ -73,6 +97,8 @@ class TransaksiController extends Controller
                             } else {
                                 return '<span class="label label-danger">' . 'Rp ' . number_format($data->denda, 0) . ' </span>';
                             }
+                        } else {
+                            return '<span class="label label-danger">' . 'Rp ' . number_format($data->denda, 0) . ' </span>';
                         }
                     }
                 )

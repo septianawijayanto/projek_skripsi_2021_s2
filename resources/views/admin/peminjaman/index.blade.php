@@ -48,8 +48,8 @@
 
                         <div class="form-group ">
                             <label for="exampleFormControlInput1">Koda transaksi</label>
-                            <input name="kode_transaksi" id="kode_transaksi" required type="text" class="form-control"
-                                placeholder="Input Koda transaksi" value="">
+                            <input name="kode_transaksi" readonly id="kode_transaksi" required type="text"
+                                class="form-control" placeholder="Input Koda transaksi" value="{{ $kode }}">
                         </div>
                         <div class="form-group">
                             <label for="level">Level</label>

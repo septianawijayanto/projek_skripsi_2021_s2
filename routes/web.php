@@ -104,6 +104,7 @@ Route::group(['middleware' => 'admin'], function () {
         // Sekolah
         Route::get('sekolah', [SekolahController::class, 'index'])->name('sekolah');
         Route::post('sekolah', [SekolahController::class, 'store'])->name('sekolah.store');
+        Route::get('sekolah/edit', [SekolahController::class, 'edit']);
         //Laporan
         Route::get('laporan', [LaporanController::class, 'index'])->name('laporan');
         Route::get('laporan/all', [LaporanController::class, 'laporan'])->name('laporan.all');

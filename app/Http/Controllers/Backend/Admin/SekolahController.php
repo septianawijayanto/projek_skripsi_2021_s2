@@ -62,4 +62,10 @@ class SekolahController extends Controller
         return response()->json($sekolah);
         // }
     }
+    public function edit()
+    {
+        $title = 'Sekolah';
+        $data = Sekolah::first();
+        return view('admin.sekolah.index', compact('data', 'title'));
+    }
 }

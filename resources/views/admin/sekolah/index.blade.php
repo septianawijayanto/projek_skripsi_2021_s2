@@ -2,7 +2,7 @@
 @section('konten')
     <div class="panel panel-headline">
         <div class="panel-heading">
-            <h3 class="panel-title">{{ $title }}</h3>
+            <h3 class="panel-title" id="judul">{{ $title }}</h3>
 
         </div>
         <div class="panel-body">
@@ -97,14 +97,11 @@
 
     <script type="text/javascript">
         $(document).ready(function() {
-
-
             $.ajaxSetup({
                 headers: {
                     'X_CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-
 
             //Simpan 
             $('body').on('submit', '#form-tambah-edit', function(e) {
@@ -131,35 +128,19 @@
                 });
             });
 
-            //Tombol Hapus
-            $(document).on('click', '.delete', function() {
-                dataid = $(this).attr('id');
-                $('#konfirmasi-modal').modal('show');
-            });
+            $('body').on('click', '.tombol-simpan', function() {
+                var data_id = $(this).data('id');
+                $.get('sekolah/' + data_id + '/edit', function(data) {
+                    $('#judul').html('Edit Sekolah');
+                    // $('#tombol-simpan').val('edit-post');
+                    $('#tombol-simpan').html(' Rubah');
+                    // $('#modal-tambah-edit').modal('show');
 
-            //Delete
-            $('#tombol-hapus').click(function() {
-                $.ajax({
-                    url: "penerbit/" + dataid,
-                    type: 'delete',
-                    beforeSend: function() {
-                        $('#tombol-hapus').text('Menghapus...');
-                    },
-                    success: function(data) {
-                        setTimeout(function() {
-                            $('#konfirmasi-modal').modal('hide');
-                            var oTable = $('#table_penerbit').dataTable();
-                            oTable.fnDraw(false);
-                        });
-                        toastr.success('Data Berhasil Dihapus');
-                    },
-                    error: function(data) {
-                        setTimeout(function() {
-                            $('#konfirmasi-modal').modal('hide');
-                        });
-                        toastr.warning('Data Berelasi');
-                    }
-
+                    $('#id').val(data.id);
+                    $('#nama_sekolah').val(data.nama_sekolah);
+                    $('#alamat').val(data.alamat);
+                    $('#no_telp').val(data.no_telp);
+                    $('#alamat').val(data.alamat)
                 })
             });
 

@@ -43,7 +43,7 @@
         <div id="pengaturan" class="collapse ">
             <ul class="nav">
                 <li><a href="{{ route('sekolah') }}" class=""><i class="fa fa-circle-thin"></i>
-                        pSekolah</a></li>
+                        Sekolah</a></li>
             </ul>
         </div>
     </li> --}}
