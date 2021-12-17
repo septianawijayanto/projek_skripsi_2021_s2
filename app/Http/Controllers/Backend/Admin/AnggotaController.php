@@ -10,10 +10,36 @@ use Illuminate\Http\Request;
 
 class AnggotaController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
         $title = 'Data Anggota';
+
+        $getRow = Anggota::orderBy('id', 'DESC')->get();
+        $rowCount = $getRow->count();
+
+        $lastId = $getRow->first();
+
+        $kode = "AG00001";
+
+        if ($rowCount > 0) {
+            if ($lastId->id < 9) {
+                $kode = "AG0000" . '' . ($lastId->id + 1);
+            } else if ($lastId->id < 99) {
+                $kode = "AG000" . '' . ($lastId->id + 1);
+            } else if ($lastId->id < 999) {
+                $kode = "AG00" . '' . ($lastId->id + 1);
+            } else if ($lastId->id < 9999) {
+                $kode = "AG0" . '' . ($lastId->id + 1);
+            } else {
+                $kode = "AG" . '' . ($lastId->id + 1);
+            }
+        }
         $level = Level::get();
+        return view('admin.anggota.index', compact('title', 'level', 'kode'));
+    }
+    public function ajax(Request $request)
+    {
+
         $list_anggota = Anggota::all();
         if ($request->ajax()) {
             return datatables()->of($list_anggota)->addIndexColumn()
@@ -28,9 +54,6 @@ class AnggotaController extends Controller
                 ->rawColumns(['action', 'level'])
                 ->make(true);
         }
-        // dd($data);
-        // return response(json_decode($data));
-        return view('admin.anggota.index', compact('title', 'level'));
     }
     public function delete($id)
     {
@@ -43,6 +66,7 @@ class AnggotaController extends Controller
         $post = Anggota::updateOrCreate(
             ['id' => $id],
             [
+                'kode_anggota' => $request->kode_anggota,
                 'nama' => $request->nama,
                 'username' => $request->username,
                 'level_id' => $request->level_id,

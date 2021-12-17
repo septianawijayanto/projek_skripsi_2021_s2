@@ -13,7 +13,7 @@ class PeminjamanController extends Controller
 {
     public function index()
     {
-        $title = 'Histori Peminjaman';
+        $title = 'Histori Transaksi';
         $klasifikasi = Klasifikasi::get();
 
         return view('anggota.transaksi.index', compact('title', 'klasifikasi'));

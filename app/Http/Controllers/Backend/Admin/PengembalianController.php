@@ -164,7 +164,7 @@ class PengembalianController extends Controller
             ]);
         }
 
-        return redirect()->back()->with('sukses', 'Bukur Rusak Berhasil ditambahkan');
+        return redirect()->back()->with('sukses', 'Buku Rusak Berhasil ditambahkan');
     }
     public function hilang($id)
     {
@@ -201,6 +201,6 @@ class PengembalianController extends Controller
             ]);
         }
 
-        return redirect()->back()->with('sukses', 'Bukur Hilang Berhasil ditambahkan');
+        return redirect()->back()->with('sukses', 'Buku Hilang Berhasil ditambahkan');
     }
 }

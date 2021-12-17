@@ -12,13 +12,24 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"
 integrity="sha256-sPB0F50YUDK0otDnsfNHawYmA5M0pjjUf4TvRJkGFrI=" crossorigin="anonymous"></script>
 
+<!-- Select2 -->
+<script src="{{ asset('select') }}/select2/js/select2.full.min.js"></script>
+
 
 <!-- <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script> -->
 
 
 <script>
     $(document).ready(function() {
+        $('.select2').select2({
+            tags: true,
+            width: '100%'
+            // dropdownParent: $('#myModal')
+        })
+        $('.select2bs4').select2({
 
+            theme: 'bootstrap4'
+        })
         $(function() {
             var flash = "{{ Session::has('sukses') }}";
             if (flash) {

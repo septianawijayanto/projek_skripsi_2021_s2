@@ -17,8 +17,6 @@ class TransaksiController extends Controller
     {
         $title = 'Transaksi Peminjaman';
 
-        $kode = "TR00001";
-
         $getRow = Transaksi::orderBy('id', 'DESC')->get();
         $rowCount = $getRow->count();
 
@@ -109,18 +107,47 @@ class TransaksiController extends Controller
 
     public function store(Request $request)
     {
-        $cek = Transaksi::whereIn('status', ['pinjam', 'boking'])->where('anggota_id', $request->get('anggota'))->count();
+        $getRow = Transaksi::orderBy('id', 'DESC')->get();
+        $rowCount = $getRow->count();
+
+        $lastId = $getRow->first();
+
+        $kode = "TR00001";
+
+        if ($rowCount > 0) {
+            if ($lastId->id < 9) {
+                $kode = "TR0000" . '' . ($lastId->id + 1);
+            } else if ($lastId->id < 99) {
+                $kode = "TR000" . '' . ($lastId->id + 1);
+            } else if ($lastId->id < 999) {
+                $kode = "TR00" . '' . ($lastId->id + 1);
+            } else if ($lastId->id < 9999) {
+                $kode = "TR0" . '' . ($lastId->id + 1);
+            } else {
+                $kode = "TR" . '' . ($lastId->id + 1);
+            }
+        }
+
+        $anggota = Anggota::where('kode_anggota', $request->kode_anggota)->first();
+        if ($anggota == null) {
+            return response()->json([
+                'error' => true,
+                'message' => 'Kode Anggota Tidak Terdaftar',
+            ]);
+        }
+        $cek = Transaksi::whereIn('status', ['pinjam', 'boking'])->where('anggota_id', $anggota->id)->count();
         if ($cek < 2) {
-            if (Transaksi::where('anggota_id', $request->get('anggota'))->where('buku_id', $request->get('buku'))->whereIn('status', ['pinjam', 'boking'])->exists()) {
+            if (Transaksi::where('anggota_id', $anggota->id)->where('buku_id', $request->get('buku'))->whereIn('status', ['pinjam', 'boking'])->exists()) {
                 return response()->json([
                     'error' => true,
                     'message' => 'Buku Sudah Dipinjam',
                 ]);
             } else {
+
                 $post = Transaksi::Create(
                     [
-                        'kode_transaksi' => $request->kode_transaksi,
-                        'anggota_id' => $request->anggota,
+                        'kode_transaksi' => $kode,
+                        'anggota_id' => $anggota->id,
                         'buku_id' => $request->buku,
                         'tgl_pinjam' => $request->tgl_pinjam,
                         'tgl_kembali' => $request->tgl_kembali,

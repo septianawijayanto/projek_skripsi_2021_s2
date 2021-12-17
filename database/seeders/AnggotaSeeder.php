@@ -18,6 +18,7 @@ class AnggotaSeeder extends Seeder
         $faker = Faker::create();
         foreach (range(1, 15) as $value) {
             Anggota::insert([
+                'kode_anggota' => $faker->firstName(),
                 'username' => $faker->firstName(),
                 'password' => \bcrypt('123'),
                 'nama' => $faker->name,

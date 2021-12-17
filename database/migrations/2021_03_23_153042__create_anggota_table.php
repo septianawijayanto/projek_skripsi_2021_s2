@@ -23,7 +23,7 @@ class CreateAnggotaTable extends Migration
             $table->date('tgl_lahir');
             $table->enum('jk', ['L', 'P']);
             $table->text('alamat');
-            $table->string('no_hp', 15);
+            $table->string('no_hp', 20);
             $table->timestamps();
         });
     }

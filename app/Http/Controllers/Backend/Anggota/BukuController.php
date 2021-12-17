@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Backend\Anggota;
 
 use App\Http\Controllers\Controller;
+use App\Models\Model\AktivitasAnggota;
 use App\Models\Model\Buku;
 use App\Models\Model\EBook;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class BukuController extends Controller
 {
@@ -59,6 +61,11 @@ class BukuController extends Controller
     public function show($id)
     {
         $data = EBook::find($id);
+        AktivitasAnggota::create([
+            'anggota_id' => Session::get('id'),
+            'status' => 'baca',
+            'aktivitas' => 'Membaca Buku ' . $data->judul_buku,
+        ]);
         $title = "Buku " . $data->judul_buku . " Kelas " . $data->kelas;
         return view('anggota.buku.show', compact('title', 'data'));
     }

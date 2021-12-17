@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
         Level::create(['level' => 'Guru']);
         Level::create(['level' => 'Staff']);
         Anggota::create([
+            'kode_anggota' => 'AG00001',
             'username' => 'anggota',
             'password' => \bcrypt('anggota'),
             'nama' => 'Anggota',
@@ -40,5 +41,6 @@ class DatabaseSeeder extends Seeder
 
         ]);
         $this->call(AnggotaSeeder::class);
+        $this->call(BukuSeeder::class);
     }
 }

@@ -17,6 +17,7 @@
                     <thead>
                         <tr>
                             <th>No</th>
+                            <th>Kode Anggota</th>
                             <th>Nama</th>
                             <th>Username</th>
                             <th>Level</th>
@@ -47,6 +48,11 @@
                         </div>
                         <div class="row">
                             <div class="col-lg-6">
+                                <div class="form-group ">
+                                    <label for="exampleFormControlInput1">Kode Anggota</label>
+                                    <input name="kode_anggota" id="kode_anggota" required type="text" readonly
+                                        class="form-control" placeholder="Input Kode Anggota" value="{{ $kode }}">
+                                </div>
                                 <div class="form-group ">
                                     <label for="exampleFormControlInput1">Nama</label>
                                     <input name="nama" id="nama" required type="text" class="form-control"
@@ -86,7 +92,7 @@
                                 <div class="form-group ">
                                     <label for="exampleFormControlInput1">Alamat</label>
                                     <textarea name="alamat" id="alamat" class="form-control" placeholder="Input Alamat"
-                                        rows="4"></textarea>
+                                        rows="8"></textarea>
                                 </div>
                                 <div class="form-group">
                                     <label for="agama">Jenis Kelamin</label>
@@ -99,7 +105,7 @@
                                 <div class="form-group ">
                                     <label for="no_hp">No Hp</label>
                                     <input name="no_hp" id="no_hp" class="form-control" placeholder="Input No Hp"
-                                        type="number">
+                                        type="text">
                                 </div>
                             </div>
                         </div>
@@ -129,12 +135,15 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: "{{ route('anggota') }}",
+                    url: "{{ route('anggota.ajax') }}",
                     type: 'GET'
                 },
                 columns: [{
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex'
+                    }, {
+                        data: 'kode_anggota',
+                        name: 'kode_anggota'
                     }, {
                         data: 'nama',
                         name: 'nama'
@@ -229,6 +238,7 @@
 
                     //set value masing-masing id berdasarkan data yg diperoleh dari ajax get request diatas               
                     $('#id').val(data.id);
+                    $('#kode_anggota').val(data.kode_anggota);
                     $('#nama').val(data.nama);
                     $('#username').val(data.username);
                     $('#level_id').val(data.level_id);

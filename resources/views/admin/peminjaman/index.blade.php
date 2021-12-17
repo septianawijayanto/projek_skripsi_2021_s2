@@ -46,12 +46,12 @@
                             <input name="id" id="id" required type="hidden" class="form-control" value="">
                         </div>
 
-                        <div class="form-group ">
-                            <label for="exampleFormControlInput1">Koda transaksi</label>
+                        {{-- <div class="form-group ">
+                            <label for="exampleFormControlInput1">Koda Transaksi</label>
                             <input name="kode_transaksi" readonly id="kode_transaksi" required type="text"
-                                class="form-control" placeholder="Input Koda transaksi" value="{{ $kode }}">
-                        </div>
-                        <div class="form-group">
+                                class="form-control" placeholder="Input Koda Transaksi" value="{{ $kode }}">
+                        </div> --}}
+                        {{-- <div class="form-group">
                             <label for="level">Level</label>
                             <select name="level" id="level" required class="form-control" required>
                                 <option value="">-Pilih-</option>
@@ -64,6 +64,11 @@
                             <label for="nama">Nama</label>
                             <select name="anggota" id="anggota" required class="form-control" required>
                             </select>
+                        </div> --}}
+                        <div class="form-group ">
+                            <label for="exampleFormControlInput1">Koda Anggota</label>
+                            <input name="kode_anggota" id="kode_anggota" required type="text" class="form-control"
+                                placeholder="Input Koda Anggota" value="">
                         </div>
                         <div class="form-group">
                             <label for="klasifikasi">Klasifikasi</label>
@@ -76,8 +81,8 @@
                         </div>
                         <div class="form-group">
                             <label for="buku_id">Judul Buku</label>
-                            <select name="buku" id="buku" class="form-control" required>
-                                {{-- <option value="">-Pilih-</option> --}}
+                            <select name="buku" id="buku" data-width="100%" class="form-control" required>
+
                             </select>
                         </div>
                         <div class="form-group ">
@@ -109,6 +114,10 @@
 
     <script type="text/javascript">
         $(document).ready(function() {
+            $('#buku').select2({
+                dropdownParent: $('#modal-tambah-edit')
+            });
+
             $('#table_transaksi').DataTable({
                 processing: true,
                 serverSide: true,
@@ -204,7 +213,7 @@
                             if (data) {
                                 $('#anggota').empty();
                                 $('#anggota').append(
-                                    '<optionn hidden>--Pilih Nama Anggota--</option>');
+                                    '<option hidden>--Pilih Nama Anggota--</option>');
                                 $.each(data, function(id, nama) {
                                     $('#anggota').append(new Option(nama, id))
                                 });
@@ -276,6 +285,9 @@
             //         $('#tgl_kembali').val(data.tgl_kembali);
             //     })
             // });
+
+
+
 
             // btn refresh
             $('.btn-refresh').click(function(e) {

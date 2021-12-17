@@ -45,6 +45,7 @@ Route::group(['middleware' => 'admin'], function () {
 
         //Anggota
         Route::get('anggota', [AnggotaController::class, 'index'])->name('anggota');
+        Route::get('anggota/ajax', [AnggotaController::class, 'ajax'])->name('anggota.ajax');
         Route::get('anggota/{id}/edit', [AnggotaController::class, 'edit']);
         Route::post('anggota', [AnggotaController::class, 'store'])->name('anggota.store');
         Route::delete('anggota/{id}', [AnggotaController::class, 'delete']);
