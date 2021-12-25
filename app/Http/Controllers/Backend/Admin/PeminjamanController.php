@@ -11,39 +11,19 @@ use App\Models\Model\Transaksi;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
-class TransaksiController extends Controller
+class PeminjamanController extends Controller
 {
     public function index()
     {
         $title = 'Transaksi Peminjaman';
 
-        $getRow = Transaksi::orderBy('id', 'DESC')->get();
-        $rowCount = $getRow->count();
-
-        $lastId = $getRow->first();
-
-        $kode = "TR00001";
-
-        if ($rowCount > 0) {
-            if ($lastId->id < 9) {
-                $kode = "TR0000" . '' . ($lastId->id + 1);
-            } else if ($lastId->id < 99) {
-                $kode = "TR000" . '' . ($lastId->id + 1);
-            } else if ($lastId->id < 999) {
-                $kode = "TR00" . '' . ($lastId->id + 1);
-            } else if ($lastId->id < 9999) {
-                $kode = "TR0" . '' . ($lastId->id + 1);
-            } else {
-                $kode = "TR" . '' . ($lastId->id + 1);
-            }
-        }
 
         $buku = Buku::where('jumlah', '>', 0)->get();
         $klasifikasi = Klasifikasi::get();
         $level = Level::get();
         $anggota = Anggota::get();
 
-        return view('admin.transaksi.index', compact('title', 'buku', 'anggota', 'klasifikasi', 'level', 'kode'));
+        return view('admin.peminjaman.index', compact('title', 'buku', 'anggota', 'klasifikasi', 'level'));
     }
     public function ajax(Request $request)
     {
@@ -70,8 +50,6 @@ class TransaksiController extends Controller
                 })
                 ->addColumn('action', function ($data) {
 
-                    // $button = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $data->id . '" data-original-title="Perpanjang" class="btn btn-warning btn-xs perpanjang"> Perpanjang</a>';
-                    // $button = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $data->id . '" data-original-title="Edit" class="btn btn-warning btn-xs btn-perpanjang"><i class="lnr lnr-pencil"></i> </a>';
                     if ($data->status == 'pinjam') {
                         $button = '<a href="/admin/transaksi/' . $data->id . '/perpanjang" type="button" name="kembalikan"  class="kembalikan btn btn-warning btn-xs">Perpanjang</a>';
                         return $button;
@@ -128,16 +106,9 @@ class TransaksiController extends Controller
             }
         }
 
-        $anggota = Anggota::where('kode_anggota', $request->kode_anggota)->first();
-        if ($anggota == null) {
-            return response()->json([
-                'error' => true,
-                'message' => 'Kode Anggota Tidak Terdaftar',
-            ]);
-        }
-        $cek = Transaksi::whereIn('status', ['pinjam', 'boking'])->where('anggota_id', $anggota->id)->count();
+        $cek = Transaksi::whereIn('status', ['pinjam', 'boking'])->where('anggota_id', $request->anggota)->count();
         if ($cek < 2) {
-            if (Transaksi::where('anggota_id', $anggota->id)->where('buku_id', $request->get('buku'))->whereIn('status', ['pinjam', 'boking'])->exists()) {
+            if (Transaksi::where('anggota_id', $request->anggota)->where('buku_id', $request->get('buku'))->whereIn('status', ['pinjam', 'boking'])->exists()) {
                 return response()->json([
                     'error' => true,
                     'message' => 'Buku Sudah Dipinjam',
@@ -147,7 +118,7 @@ class TransaksiController extends Controller
                 $post = Transaksi::Create(
                     [
                         'kode_transaksi' => $kode,
-                        'anggota_id' => $anggota->id,
+                        'anggota_id' => $request->anggota,
                         'buku_id' => $request->buku,
                         'tgl_pinjam' => $request->tgl_pinjam,
                         'tgl_kembali' => $request->tgl_kembali,
@@ -180,29 +151,21 @@ class TransaksiController extends Controller
     }
     public function nama_buku($id)
     {
+        // $buku = Buku::where('klasifikasi_id', $id)->get();
         $buku = Buku::where('jumlah', '>', 0)->where('klasifikasi_id', $id)->pluck('judul_buku', 'id');
         return response()->json($buku);
     }
-    public function kode_anggota($kode_anggota)
+    public function nama_anggota($id)
     {
-        $anggota = Anggota::where('kode_anggota', $kode_anggota)->pluck('nama', 'kode_anggota');
+        $anggota = Anggota::where('level_id', $id)->pluck('nama', 'id');
         return response()->json($anggota);
     }
     public function perpanjang($id)
     {
         $data = Transaksi::find($id);
-        Transaksi::where('id', $id)->update(['tgl_kembali' => date('Y-m-d', strtotime(Carbon::today()->addDays(7)->toDateString())),]);
+        Transaksi::where('id', $id)->update([
+            'tgl_kembali' => date('Y-m-d', strtotime(Carbon::today()->addDays(7)->toDateString())),
+        ]);
         return redirect()->back()->with('sukses', 'Peminjaman Berhasil Diperpanjang');
-    }
-    public function get_anggota()
-    {
-        $kode_anggota = $this->input->post('kode_anggota');
-        $data = Anggota::get_data_anggota($kode_anggota);
-        echo json_encode($data);
-    }
-    public function tes($kode_anggota)
-    {
-        $anggota = Anggota::where('kode_anggota', $kode_anggota)->pluck('nama', 'kode_anggota');
-        return response()->json($anggota);
     }
 }

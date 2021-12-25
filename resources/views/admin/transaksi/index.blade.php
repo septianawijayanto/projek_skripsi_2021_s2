@@ -12,7 +12,7 @@
         <div class="panel-body">
             <div class="table-responsive">
                 <!-- Tabel -->
-                <table class="table table-responsiv" id="table_peminjaman">
+                <table class="table table-responsiv" id="table_transaksi">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -46,18 +46,19 @@
                             <input name="id" id="id" required type="hidden" class="form-control" value="">
                         </div>
 
-                        <div class="form-group">
-                            <label for="level">Level</label>
-                            <select name="level" id="level" required class="form-control" required>
-                                <option value="">-Pilih-</option>
-                                @foreach ($level as $level)
-                                    <option value="{{ $level->id }}">{{ $level->level }}</option>
-                                @endforeach
-                            </select>
+                        <div class="form-group ">
+                            <label for="exampleFormControlInput1">Koda Anggota</label>
+                            <input name="kode_anggota" id="kode_anggota" required type="text" class="form-control"
+                                placeholder="Input Koda Anggota" value="">
                         </div>
+                        {{-- <div class="form-group ">
+                            <label for="exampleFormControlInput1">Nama Anggota</label>
+                            <input name="nama" id="nama" required type="text" class="form-control"
+                                placeholder="Input Koda Anggota" value="">
+                        </div> --}}
                         <div class="form-group">
                             <label for="nama">Nama</label>
-                            <select name="anggota" id="anggota" required class="form-control" required>
+                            <select name="nama" id="nama" data-width="100%" required class="form-control" required>
                             </select>
                         </div>
                         <div class="form-group">
@@ -107,12 +108,15 @@
             $('#buku').select2({
                 dropdownParent: $('#modal-tambah-edit')
             });
+            $('#nama').select2({
+                dropdownParent: $('#modal-tambah-edit')
+            });
 
-            $('#table_peminjaman').DataTable({
+            $('#table_transaksi').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: "{{ route('admin.peminjaman.ajax') }}",
+                    url: "{{ route('transaksi.ajax') }}",
                     type: "GET"
                 },
                 columns: [{
@@ -156,6 +160,34 @@
                 }
             });
 
+            $("#kode_anggota").on('change', function() {
+                var id = $(this).val();
+                if (id) {
+                    $.ajax({
+                        type: "GET",
+                        url: "peminjaman/" + id + "/tes",
+                        data: {
+                            id: $(this).val()
+                        },
+                        dataType: "JSON",
+                        success: function(data) {
+                            if (data) {
+                                $('#nama').empty();
+                                $.each(data, function(id, nama) {
+                                    $('#nama').append(new Option(nama, id))
+                                });
+
+                            } else {
+                                $('#nama').empty();
+                            }
+                        }
+                    });
+                } else {
+                    $('#nama').empty()
+                }
+            });
+
+
             //Klasifikasi
             $("#klasifikasi").on('change', function() {
                 var klasifikasi_id = $(this).val();
@@ -188,36 +220,6 @@
                 }
             });
 
-            // //Level
-            $("#level").on('change', function() {
-                var level_id = $(this).val();
-                if (level_id) {
-                    $.ajax({
-                        type: "GET",
-                        url: "nama_anggota/" + level_id,
-                        data: {
-                            id: $(this).val()
-                        },
-                        dataType: "JSON",
-                        success: function(data) {
-                            if (data) {
-                                $('#anggota').empty();
-                                $('#anggota').append(
-                                    '<option hidden>--Pilih Nama Anggota--</option>');
-                                $.each(data, function(id, nama) {
-                                    $('#anggota').append(new Option(nama, id))
-                                });
-
-                            } else {
-                                $('#anggota').empty();
-                            }
-                        }
-                    });
-                } else {
-                    $('#anggota').empty()
-                }
-            });
-
             // Tombol Tambah
             $('#tombol-tambah').click(function() {
                 $('#tombol-simpan').val('create-post');
@@ -235,14 +237,14 @@
                         $('#tombol-simpan').html('Menyimpan ...');
                         $.ajax({
                             data: $('#form-tambah-edit').serialize(),
-                            url: "{{ route('admin.peminjaman.store') }}",
+                            url: "{{ route('transaksi.store') }}",
                             type: "POST",
                             dataType: 'json',
                             success: function(data) {
                                 $('#form-tambah-edit').trigger('reset');
                                 $('#modal-tambah-edit').modal('hide');
                                 $('#tombol-simpan').html('Simpan');
-                                var oTable = $('#table_peminjaman').dataTable();
+                                var oTable = $('#table_transaksi').dataTable();
                                 oTable.fnDraw(false);
                                 if (data.success === true) {
                                     toastr.success("Done!", data.message, "success");
@@ -258,6 +260,9 @@
                     }
                 })
             }
+
+
+
 
             // btn refresh
             $('.btn-refresh').click(function(e) {

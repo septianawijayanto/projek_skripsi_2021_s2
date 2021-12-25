@@ -30,6 +30,8 @@
                         Pengembalian</a></li>
                 <li><a href="{{ route('denda') }}" class=""><i class="fa fa-circle-thin"></i> Denda </a>
                 </li>
+                {{-- <li><a href="{{ route('peminjaman') }}" class=""><i class="fa fa-circle-thin"></i>
+                        Peminjaman</a></li> --}}
 
             </ul>
         </div>

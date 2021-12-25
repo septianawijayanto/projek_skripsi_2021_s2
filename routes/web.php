@@ -7,6 +7,7 @@ use App\Http\Controllers\Backend\Admin\DendaController;
 use App\Http\Controllers\Backend\Admin\EBookController;
 use App\Http\Controllers\Backend\Admin\KlasifikasiController;
 use App\Http\Controllers\Backend\Admin\LaporanController;
+use App\Http\Controllers\Backend\Admin\PeminjamanController as AdminPeminjamanController;
 use App\Http\Controllers\Backend\Admin\PenerbitController;
 use App\Http\Controllers\Backend\Admin\PengembalianController;
 use App\Http\Controllers\Backend\Admin\SekolahController;
@@ -85,9 +86,16 @@ Route::group(['middleware' => 'admin'], function () {
         Route::get('transaksi/ajax', [TransaksiController::class, 'ajax'])->name('transaksi.ajax');
         Route::post('transaksi', [TransaksiController::class, 'store'])->name('transaksi.store');
         Route::get('nama_buku/{id}', [TransaksiController::class, 'nama_buku']);
-        Route::get('nama_anggota/{id}', [TransaksiController::class, 'nama_anggota']);
+        Route::get('kode_anggota', [TransaksiController::class, 'get_anggota']);
         Route::get('transaksi/{id}/perpanjang', [TransaksiController::class, 'perpanjang']);
+        Route::get('peminjaman/{id}/tes', [TransaksiController::class, 'tes']);
 
+        //Peminjaman
+        Route::get('peminjaman', [AdminPeminjamanController::class, 'index'])->name('peminjaman');
+        Route::get('peminjaman/ajax', [AdminPeminjamanController::class, 'ajax'])->name('admin.peminjaman.ajax');
+        Route::post('peminjaman', [AdminPeminjamanController::class, 'store'])->name('admin.peminjaman.store');
+        Route::get('nama_buku/{id}', [AdminPeminjamanController::class, 'nama_buku']);
+        Route::get('nama_anggota/{id}', [AdminPeminjamanController::class, 'nama_anggota']);
 
         //Transaksi Pengembalian
         Route::get('pengembalian', [PengembalianController::class, 'index'])->name('pengembalian');
