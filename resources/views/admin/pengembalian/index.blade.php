@@ -11,7 +11,7 @@
         <div class="panel-body">
             <div class="table-responsive">
                 <!-- Tabel -->
-                <table class="table table-responsiv" id="table_transaksi">
+                <table class="table table-responsiv" id="tabel_pengembalian">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -30,8 +30,8 @@
             </div>
         </div>
     </div>
-    <!-- MULAI MODAL Rusak Hilang-->
-    <div class="modal fade" id="modal-rusak-hilang" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+    <!-- MULAI MODAL denda-->
+    <div class="modal fade" id="modal-denda" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -40,19 +40,22 @@
                 </div>
 
                 <div class="modal-body">
-                    <form id="form-rusak-hilang" enctype="multipart/form-data">
+                    <form id="form-denda" enctype="multipart/form-data">
                         <div class="form-group ">
-                            <input name="id" id="id" required type="hidden" class="form-control" value="">
+                            <input name="id" id="id" required type="text" class="form-control" value="">
                         </div>
                         <div class="form-group ">
                             <label for="kode_transaksi">Kode Transaksi</label>
                             <input name="kode_transaksi" id="kode_transaksi" readonly type="text" class="form-control"
                                 placeholder="Input Kode Transaksi" value="">
                         </div>
-                        <div class="form-group ">
-                            <label for="exampleFormControlInput1">Denda Awal</label>
-                            <input name="denda" id="denda" required type="text" class="form-control"
-                                placeholder="Input Denda Awal" value="">
+                        <div class="form-group">
+                            <label for="status">Status Buku</label>
+                            <select name="status" id="status" required class="form-control" required>
+                                <option value="">-Pilih-</option>
+                                <option value="rusak">Rusak</option>
+                                <option value="hilang">Hilang</option>
+                            </select>
                         </div>
                         <div class="form-group ">
                             <label for="exampleFormControlInput1">Denda</label>
@@ -76,7 +79,7 @@
 
     <script type="text/javascript">
         $(document).ready(function() {
-            $('#table_transaksi').DataTable({
+            $('#tabel_pengembalian').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: {
@@ -122,41 +125,47 @@
                 }
             });
 
-            // $(document).ready(function() {
-            //     $('.kembalikan').click(function() {
-            //         $.post('pengembalian/' + id + '/kembali', function() {
-
-            //         });
-
-            //     });
-            // });
-
-            //Tmb Rusak
-            $('body').on('click', '.btn-rusak', function() {
+            //Tmb denda
+            $('body').on('click', '.btn-denda', function() {
                 var data_id = $(this).data('id');
-                $.get('pengembalian/' + data_id + '/rusak', function(data) {
-                    $('#modal-judul').html('Input Denda Rusak');
-                    // $('#tombol-simpan').val('btn-rusak');
+                $.get('pengembalian/' + data_id + '/edit', function(data) {
+                    $('#modal-judul').html('Input Denda denda');
+                    // $('#tombol-simpan').val('btn-denda');
                     $('#tombol-simpan').html(' Simpan');
-                    $('#modal-rusak-hilang').modal('show');
+                    $('#modal-denda').modal('show');
                     $('#id').val(data.id);
                     $('#kode_transaksi').val(data.kode_transaksi);
-                    $('#denda').val(data.denda);
                 })
             });
 
-            //Tmb Hilang
-            $('body').on('click', '.btn-hilang', function() {
-                var hilang_id = $(this).data('id');
-                $.get('pengembalian/' + hilang_id + '/hilang', function(data) {
-                    $('#modal-judul').html('Input Denda Hilang');
-                    $('#tombol-simpan').html(' Simpan');
-                    $('#modal-rusak-hilang').modal('show');
-                    $('#id').val(data.id);
-                    $('#kode_transaksi').val(data.kode_transaksi);
-                    $('#denda').val(data.denda);
-                })
+            //Simpan denda
+            $('body').on('submit', '#form-denda', function(e) {
+                e.preventDefault();
+                var actionType = $('#tombol-simpan').val();
+                $('#tombol-simpan').html('Menyimpan..');
+                var formData = new FormData(this);
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ route('denda.store') }}",
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: (data) => {
+                        $('#form-denda').trigger("reset");
+                        $('#modal-denda').modal('hide');
+                        $('#tombol-simpan').html('Save Changes');
+                        var oTable = $('#tabel_pengembalian').dataTable();
+                        oTable.fnDraw(false);
+                        toastr.success('Denda denda Berhasil Ditambah');
+                    },
+                    error: function(data) {
+                        console.log('Error:', data);
+                        $('#tombol-simpan').html('Save Changes');
+                    }
+                });
             });
+
 
             // btn refresh
             $('.btn-refresh').click(function(e) {
@@ -164,6 +173,7 @@
                 $('.preloader').fadeIn();
                 location.reload();
             })
+
 
         });
     </script>

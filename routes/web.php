@@ -101,9 +101,8 @@ Route::group(['middleware' => 'admin'], function () {
         Route::get('pengembalian', [PengembalianController::class, 'index'])->name('pengembalian');
         Route::get('pengembalian/ajax', [PengembalianController::class, 'ajax'])->name('pengembalian.ajax');
         Route::get('pengembalian/{id}/kembali', [PengembalianController::class, 'kembali']);
-        Route::get('pengembalian/{id}/rusak', [PengembalianController::class, 'rusak']);
-        Route::get('pengembalian/{id}/hilang', [PengembalianController::class, 'hilang']);
-
+        Route::get('pengembalian/{id}/edit', [PengembalianController::class, 'edit']);
+        Route::post('pengembalian/denda', [PengembalianController::class, 'denda'])->name('denda.store');
 
         //Denda
         Route::get('denda', [DendaController::class, 'index'])->name('denda');
@@ -118,6 +117,8 @@ Route::group(['middleware' => 'admin'], function () {
         Route::get('laporan', [LaporanController::class, 'index'])->name('laporan');
         Route::get('laporan/all', [LaporanController::class, 'laporan'])->name('laporan.all');
         Route::get('laporan/print', [LaporanController::class, 'print'])->name('laporan.print');
+        Route::get('laporan/harian', [LaporanController::class, 'harian'])->name('laporan.harian');
+        Route::get('laporan/periode', [LaporanController::class, 'periode']);
     });
 });
 

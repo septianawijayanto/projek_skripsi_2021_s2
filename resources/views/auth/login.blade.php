@@ -1,5 +1,4 @@
 @extends('auth.master')
-@section('title', 'Digilib | Login')
 
 @section('konten')
     <form class="form-auth-small" method="POST" action="{{ url('post/login') }}">
@@ -45,44 +44,5 @@
 
 @endsection
 @section('scripts')
-    <script>
-        $("#username").keyup(function(e) {
-            var username = .$("#username").val();
-            if (username.length >= 5) {
-                $.ajax({
-                    type: "GET",
-                    url: "{{ url('post/login/cek-username/json') }}",
-                    data: {
-                        username: username
-                    },
-                    dataType: "JSON",
-                    success: function(data) {
-                        if (data.success) {
-                            $("#username").removeClass("is-invalid");
-                            $("#username").addClass("is-valid");
-                            $("#password").val('');
-                            $("#password").removeAttr("disabled", "disabled");
-                        } else {
-                            $("#username").removeClass("is-invalid");
-                            $("#usenmae").addClass("is-invalid");
-                            $("#password").val('');
-                            $("#password").attr("disabled", "disabled");
-                            $("#remember").attr("disabled", "disabled");
-                            $("#btn-login").attr("disabled", "disabled");
-                        }
-                    },
-                    error: function() {
 
-                    }
-                });
-            } else {
-                $("#username").removeClass("is-valid");
-                $("#username").removeClass("is-invalid");
-                $("#password").val('');
-                $("#password").attr("disabled", "disabled");
-                $("#remember").attr("disabled", "disabled");
-                $("#btn-login").attr("disabled", "disabled");
-            }
-        });
-    </script>
 @endsection

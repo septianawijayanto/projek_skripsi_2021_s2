@@ -45,14 +45,7 @@ class PengembalianController extends Controller
                     if ($data->status == 'pinjam') {
                         $button = '<a href="/admin/pengembalian/' . $data->id . '/kembali" type="button" name="kembalikan"  class="kembalikan btn btn-success btn-xs">Kembali</a>';
                         $button .= '&nbsp;';
-                        $button .= '<a href="/admin/pengembalian/' . $data->id . '/rusak" type="button" name="kembalikan"  class="kembalikan btn btn-danger btn-xs">Rusak</a>';
-                        $button .= '&nbsp;';
-                        $button .= '<a href="/admin/pengembalian/' . $data->id . '/hilang" type="button" name="kembalikan"  class="kembalikan btn btn-warning btn-xs">Hilang</a>';
-                        // $button .= '&nbsp;';
-                        // $button .= '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $data->id . '" data-original-title="Edit" class="btn btn-danger btn-xs btn-rusak">Rusak</a>';
-                        // $button .= '&nbsp;';
-                        // $button .= '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $data->id . '" data-original-title="Edit" class="btn btn-warning btn-xs btn-hilang">Hilang</a>';
-
+                        $button .= '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $data->id . '" data-original-title="Edit" class="btn btn-danger btn-xs btn-denda">Denda</a>';
                         return $button;
                     }
                 })
@@ -122,85 +115,104 @@ class PengembalianController extends Controller
 
         return redirect('admin/pengembalian')->with('sukses', 'Buku Berhasil Dikembalikan');
     }
-    public function rusak($id)
+    public function edit($id)
     {
-        // $data = Transaksi::where('id', $id)->first();
-        // return response()->json($data);
-        $post = Transaksi::find($id);
-
-        // $tgl_balek = $post->tgl_kembali;
-        // $tgl2 = Carbon::now();
-        // $selisih = $tgl2->diffInDays($tgl_balek);
-
-        $date = $post->tgl_kembali;
-        $datework = Carbon::createFromDate($date);
-        $now = Carbon::now();
-        $selisih = $datework->diffInDays($now);
-
-        $idbuku = $post->buku_id;
-        $buku = Buku::find($idbuku);
-
-        $rusak = $buku->rusak;
-        $saiki = $rusak + 1;
-
-        $dijilh = $buku->jml_dipinjam;
-        $jmlsaiki = $dijilh - 1;
-
-        Buku::where('id', $idbuku)->update([
-            'rusak' => $saiki,
-            'jml_dipinjam' => $jmlsaiki,
-        ]);
-        if ($date < $now) {
-            Transaksi::where('id', $id)->update([
-                'status' => 'rusak',
-                'denda' => ($selisih * 1000) + 100000,
-                'status_denda' => 'Belum Lunas',
-            ]);
-        } else {
-            Transaksi::where('id', $id)->update([
-                'status' => 'rusak',
-                'denda' => 100000,
-                'status_denda' => 'Belum Lunas',
-            ]);
-        }
-
-        return redirect()->back()->with('sukses', 'Buku Rusak Berhasil ditambahkan');
+        $post = Transaksi::where('id', $id)->first();
+        return response()->json($post);
     }
-    public function hilang($id)
+    public function denda(Request $request)
     {
-        $post = Transaksi::find($id);
+        $id = $request->id;
+        if ($request->status == "rusak") {
+            $post = Transaksi::find($id);
 
-        $tgl_balek = $post->tgl_kembali;
-        $tgl2 = Carbon::now();
-        $selisih = $tgl2->diffInDays($tgl_balek);
+            $date = $post->tgl_kembali;
+            $datework = Carbon::createFromDate($date);
+            $now = Carbon::now();
+            $selisih = $datework->diffInDays($now);
 
-        $idbuku = $post->buku_id;
-        $buku = Buku::find($idbuku);
+            $idbuku = $post->buku_id;
+            $buku = Buku::find($idbuku);
 
-        $hilang = $buku->hilang;
-        $saiki = $hilang + 1;
+            $rusak = $buku->rusak;
+            $saiki = $rusak + 1;
 
-        $dijilh = $buku->jml_dipinjam;
-        $jmlsaiki = $dijilh - 1;
+            $dijilh = $buku->jml_dipinjam;
+            $jmlsaiki = $dijilh - 1;
 
-        Buku::where('id', $idbuku)->update([
-            'hilang' => $saiki,
-            'jml_dipinjam' => $jmlsaiki,
-        ]);
-        if ($tgl_balek < $tgl2) {
-            Transaksi::where('id', $id)->update([
-                'status' => 'hilang',
-                'denda' => ($selisih * 1000) + 100000,
-                'status_denda' => 'Belum Lunas',
+            Buku::where('id', $idbuku)->update([
+                'rusak' => $saiki,
+                'jml_dipinjam' => $jmlsaiki,
             ]);
+            if ($date < $now) {
+                $data = Transaksi::updateOrCreate(
+                    ['id' => $id],
+                    [
+                        'status' => $request->status,
+                        'denda' => ($selisih * 1000) + $request->denda,
+                        'status_denda' => 'Belum Lunas',
+                    ],
+                );
+                return response()->json($data);
+            } else {
+                $data = Transaksi::updateOrCreate(
+                    ['id' => $id],
+                    [
+                        'status' => $request->status,
+                        'denda' => $request->denda,
+                        'status_denda' => 'Belum Lunas',
+                    ],
+                );
+                return response()->json($data);
+            }
         } else {
-            Transaksi::where('id', $id)->update([
-                'status' => 'hilang',
-                'denda' => 100000,
-                'status_denda' => 'Belum Lunas',
-            ]);
-        }
+            $post = Transaksi::find($id);
 
-        return redirect()->back()->with('sukses', 'Buku Hilang Berhasil ditambahkan');
+            $date = $post->tgl_kembali;
+            $datework = Carbon::createFromDate($date);
+            $now = Carbon::now();
+            $selisih = $datework->diffInDays($now);
+
+            $idbuku = $post->buku_id;
+            $buku = Buku::find($idbuku);
+
+            $hilang = $buku->hilang;
+            $saiki = $hilang + 1;
+
+            $dijilh = $buku->jml_dipinjam;
+            $jmlsaiki = $dijilh - 1;
+
+            Buku::where('id', $idbuku)->update([
+                'hilang' => $saiki,
+                'jml_dipinjam' => $jmlsaiki,
+            ]);
+            if ($date < $now) {
+                $data = Transaksi::updateOrCreate(
+                    ['id' => $id],
+                    [
+                        'status' => $request->status,
+                        'denda' => ($selisih * 1000) + $request->denda,
+                        'status_denda' => 'Belum Lunas',
+                    ],
+                );
+                return response()->json($data);
+            } else {
+                $data = Transaksi::updateOrCreate(
+                    ['id' => $id],
+                    [
+                        'status' => $request->status,
+                        'denda' => $request->denda,
+                        'status_denda' => 'Belum Lunas',
+                    ],
+                );
+                return response()->json($data);
+            }
+        }
+    }
+    public function rusak(Request $request)
+    {
+    }
+    public function hilang(Request $request)
+    {
     }
 }

@@ -63,6 +63,8 @@
             <div class="container-fluid">
                 <p class="copyright">Shared by <i class="fa fa-love"></i><a href="https://bootstrapthemes.co">BootstrapThemes</a>
                 </p>
+                  <strong>Copyright &copy; 2021 <a href="{{ env('DEV_URL') }}">{{ env('DEV_NAME') }}</a>.</strong>
+            All rights reserved.
             </div>
         </footer>
     </div>

@@ -28,13 +28,22 @@
                         <div class="overlay"></div>
                         <div class="content text">
                             <h1 class="heading">Sistem Informasi Perpustakaan</h1>
-                            <p>SMP Negeri 26 Kabupaten Tebo</p>
+                            <p>{{ env('STORE_NAME') }}</p>
                         </div>
                     </div>
                     <div class="clearfix"></div>
                 </div>
             </div>
         </div>
+        <footer>
+            <div class="container-fluid">
+                <p class="copyright">Shared by <i class="fa fa-love"></i><a
+                        href="https://bootstrapthemes.co">BootstrapThemes</a>
+                </p>
+                <strong>Copyright &copy; 2021 <a href="{{ env('DEV_URL') }}">{{ env('DEV_NAME') }}</a>.</strong>
+                All rights reserved.
+            </div>
+        </footer>
     </div>
     {{-- @include('anggota.layouts.script') --}}
 

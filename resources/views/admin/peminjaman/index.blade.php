@@ -71,7 +71,7 @@
                         </div>
                         <div class="form-group">
                             <label for="buku_id">Judul Buku</label>
-                            <select name="buku" id="buku" data-width="100%" class="form-control" required>
+                            <select name="buku" id="buku" data-width="100%" class="form-control">
 
                             </select>
                         </div>

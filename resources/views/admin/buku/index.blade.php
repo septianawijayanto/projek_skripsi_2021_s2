@@ -249,34 +249,6 @@
                     }
                 });
             });
-            // if ($('#form-tambah-edit').length > 0) {
-            //     $('#form-tambah-edit').validate({
-            //         submitHandler: function(form) {
-            //             var actionType = $('#tombol-simpan').val();
-            //             $('#tombol-simpan').html('Menyimpan ...');
-
-            //             $.ajax({
-            //                 data: $('#form-tambah-edit').serialize(),
-            //                 url: "{{ route('buku.store') }}",
-            //                 type: "POST",
-            //                 dataType: 'json',
-            //                 success: function(data) {
-            //                     $('#form-tambah-edit').trigger('reset');
-            //                     $('#modal-tambah-edit').modal('hide');
-            //                     $('#tombol-simpan').html('Simpan');
-            //                     var oTable = $('#table_buku').dataTable();
-            //                     oTable.fnDraw(false);
-            //                     toastr.success('Data Berhasil Disimpan');
-            //                 },
-            //                 error: function(data) {
-            //                     console.log('Eror', data);
-            //                     $('#tombol-simpan').html('Simpan');
-            //                 }
-            //             })
-            //         }
-            //     })
-            // }
-
             //Tombol Hapus
             $(document).on('click', '.delete', function() {
                 dataid = $(this).attr('id');

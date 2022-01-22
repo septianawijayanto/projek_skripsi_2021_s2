@@ -117,7 +117,7 @@
                 <img src="gambar/logo.jpeg" class="center" class="img img-responsive">
             </td>
             <td style="border: 0px;">
-                <b> PEMERINTAH KABUPATEN TEBO</b>
+                <b>{{ env('STORE_PEMERINTAH')}}</b>
             </td>
             <td rowspan="3" class="center" style="border: 0px;">
                 <img src="gambar/logotutwuri.png" class="center" class="img img-responsive">
@@ -125,29 +125,28 @@
         </tr>
         <tr>
             <td style="border: 0px;">
-                <b> DINAS PENDIDIKAN DAN KEBUDAYAAN</b>
+                <b> {{ env('STORE_DINAS')}}</b>
             </td>
         </tr>
         <tr>
             <td style="border: 0px;">
-                <b style="font-size: 30px;">SMP Negeri 26 Kabupaten Tebo</b>
+                <b style="font-size: 30px;">{{ env('STORE_NAME')}}</b>
             </td>
         </tr>
         <tr>
-            <td style="border: 0px;">NPSN :10503265</td>
+            <td style="border: 0px;">NPSN : {{ env('STORE_NPSN')}}</td>
             <td style="border: 0px;">
-                <font style="font-size: 20px;">Jalan Lawu, Desa Suka Maju, Kec. Rimbo Ulu, Kab. Tebo, Jambi Kode Pos :
-                    37553</font>
+                <font style="font-size: 20px;">{{ env('STORE_ADDRESS')}}, Kec.{{ env('STORE_KEC')}}, Kab. {{ env('STORE_KAB')}}, Prov. {{ env('STORE_PROV')}}, Kode Pos.{{ env('STORE_POS')}}</font>
             </td>
-            <td style="border: 0px;">NSS : 44224444 </td>
+            <td style="border: 0px;">NSS : {{ env('STORE_NSS')}}</td>
         </tr>
     </table>
     <hr>
     @yield('konten')
-    <p class="right">Tebo, {{ $tgl }}</p>
+    <p class="right">{{ env('STORE_KAB')}}, {{ $tgl }}</p>
 
     <br>
-    <p class="right">Admin</p>
+    <p class="right">{{Session::get('nama')}}</p>
 </body>
 
 </html>

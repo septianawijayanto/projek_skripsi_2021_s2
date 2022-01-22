@@ -14,6 +14,7 @@ class LoginController extends Controller
 {
     public function index()
     {
+        $title="Login";
         if (Session::has('login_sebagai')) {
             if (Session::get('login_sebagai') == 'admin') {
                 return redirect('admin/dashboard');
@@ -21,7 +22,7 @@ class LoginController extends Controller
                 return redirect('anggota/dashboard');
             }
         }
-        return view('auth.login');
+        return view('auth.login', compact('title'));
     }
     public function logout()
     {

@@ -51,15 +51,10 @@
                             <input name="kode_anggota" id="kode_anggota" required type="text" class="form-control"
                                 placeholder="Input Koda Anggota" value="">
                         </div>
-                        {{-- <div class="form-group ">
-                            <label for="exampleFormControlInput1">Nama Anggota</label>
-                            <input name="nama" id="nama" required type="text" class="form-control"
-                                placeholder="Input Koda Anggota" value="">
-                        </div> --}}
                         <div class="form-group">
                             <label for="nama">Nama</label>
-                            <select name="nama" id="nama" data-width="100%" required class="form-control" required>
-                            </select>
+                            <input name="nama" id="nama" disabled data-width="100%" required class="form-control"
+                                required>
                         </div>
                         <div class="form-group">
                             <label for="klasifikasi">Klasifikasi</label>
@@ -106,9 +101,6 @@
     <script type="text/javascript">
         $(document).ready(function() {
             $('#buku').select2({
-                dropdownParent: $('#modal-tambah-edit')
-            });
-            $('#nama').select2({
                 dropdownParent: $('#modal-tambah-edit')
             });
 
@@ -174,7 +166,7 @@
                             if (data) {
                                 $('#nama').empty();
                                 $.each(data, function(id, nama) {
-                                    $('#nama').append(new Option(nama, id))
+                                    $('#nama').val(nama, id)
                                 });
 
                             } else {
@@ -230,37 +222,66 @@
             });
 
             //Simpan dan Edit STore
-            if ($('#form-tambah-edit').length > 0) {
-                $('#form-tambah-edit').validate({
-                    submitHandler: function(form) {
-                        var actionType = $('#tombol-simpan').val();
-                        $('#tombol-simpan').html('Menyimpan ...');
-                        $.ajax({
-                            data: $('#form-tambah-edit').serialize(),
-                            url: "{{ route('transaksi.store') }}",
-                            type: "POST",
-                            dataType: 'json',
-                            success: function(data) {
-                                $('#form-tambah-edit').trigger('reset');
-                                $('#modal-tambah-edit').modal('hide');
-                                $('#tombol-simpan').html('Simpan');
-                                var oTable = $('#table_transaksi').dataTable();
-                                oTable.fnDraw(false);
-                                if (data.success === true) {
-                                    toastr.success("Done!", data.message, "success");
-                                } else {
-                                    toastr.error("Error!", data.message, "error");
-                                }
-                            },
-                            error: function(data) {
-                                console.log('Eror', data);
-                                $('#tombol-simpan').html('Simpan');
-                            }
-                        })
+            // if ($('#form-tambah-edit').length > 0) {
+            //     $('#form-tambah-edit').validate({
+            //         submitHandler: function(form) {
+            //             var actionType = $('#tombol-simpan').val();
+            //             $('#tombol-simpan').html('Menyimpan ...');
+            //             $.ajax({
+            //                 data: $('#form-tambah-edit').serialize(),
+            //                 url: "{{ route('transaksi.store') }}",
+            //                 type: "POST",
+            //                 dataType: 'json',
+            //                 success: function(data) {
+            //                     $('#form-tambah-edit').trigger('reset');
+            //                     $('#modal-tambah-edit').modal('hide');
+            //                     $('#tombol-simpan').html('Simpan');
+            //                     var oTable = $('#table_transaksi').dataTable();
+            //                     oTable.fnDraw(false);
+            //                     if (data.success === true) {
+            //                         toastr.success("Done!", data.message, "success");
+            //                     } else {
+            //                         toastr.error("Error!", data.message, "error");
+            //                     }
+            //                 },
+            //                 error: function(data) {
+            //                     console.log('Eror', data);
+            //                     $('#tombol-simpan').html('Simpan');
+            //                 }
+            //             })
+            //         }
+            //     })
+            // }
+            $('body').on('submit', '#form-tambah-edit', function(e) {
+                e.preventDefault();
+                var actionType = $('#tombol-simpan').val();
+                $('#tombol-simpan').html('Menyimpan..');
+                var formData = new FormData(this);
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ route('transaksi.store') }}",
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function(data) {
+                        $('#form-tambah-edit').trigger('reset');
+                        $('#modal-tambah-edit').modal('hide');
+                        $('#tombol-simpan').html('Simpan');
+                        var oTable = $('#table_transaksi').dataTable();
+                        oTable.fnDraw(false);
+                        if (data.success === true) {
+                            toastr.success("Done!", data.message, "success");
+                        } else {
+                            toastr.error("Error!", data.message, "error");
+                        }
+                    },
+                    error: function(data) {
+                        console.log('Eror', data);
+                        $('#tombol-simpan').html('Simpan');
                     }
-                })
-            }
-
+                });
+            });
 
 
 

@@ -154,6 +154,7 @@ class TransaksiController extends Controller
                         'status' => 'pinjam',
                         'status_denda' => 0,
                         'denda' => 0,
+                        'created_at' => Date('Y-m-d', strtotime(Carbon::today()->toDateString()))
                     ]
                 );
                 $idbuku = $post->buku_id;
