@@ -6,7 +6,8 @@
 
         </div>
         <div class="panel-body">
-            <button type="button" class="btn btn-warning btn-xs btn-refresh"><i class="fa fa-refresh"></i></button>
+            <button type="button" style="background-color: pink" class="btn btn-xs btn-refresh"><i
+                    class="fa fa-refresh"></i></button>
         </div>
         <div class="panel-body">
             <div class="row">

@@ -42,7 +42,7 @@
                 <div class="modal-body">
                     <form id="form-denda" enctype="multipart/form-data">
                         <div class="form-group ">
-                            <input name="id" id="id" required type="text" class="form-control" value="">
+                            <input name="id" id="id" required type="hidden" class="form-control" value="">
                         </div>
                         <div class="form-group ">
                             <label for="kode_transaksi">Kode Transaksi</label>
@@ -75,8 +75,6 @@
     <!-- AKHIR MODAL -->
 @endsection
 @section('scripts')
-
-
     <script type="text/javascript">
         $(document).ready(function() {
             $('#tabel_pengembalian').DataTable({
@@ -177,6 +175,4 @@
 
         });
     </script>
-
-
 @endsection
