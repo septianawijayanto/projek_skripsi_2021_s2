@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Backend\Admin\AdminController;
 use App\Http\Controllers\Backend\Admin\AnggotaController;
 use App\Http\Controllers\Backend\Admin\BukuController;
 use App\Http\Controllers\Backend\Admin\DashboardController;
@@ -40,9 +41,16 @@ Route::get('logout', [LoginController::class, 'logout']);
 Route::get('post/login/cek-username/json', [LoginController::class, 'cek_username']);
 Route::get('post/login/cek-password/json', [LoginController::class, 'cek_password']);
 
+
+//Admin
 Route::group(['middleware' => 'admin'], function () {
     Route::prefix('admin')->group(function () {
         Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+        Route::get('admin', [AdminController::class, 'index'])->name('admin');
+        Route::post('admin', [AdminController::class, 'store'])->name('admin.store');
+        Route::get('admin/{id}/edit', [AdminController::class, 'edit']);
+        Route::delete('admin/{id}', [AdminController::class, 'delete']);
 
         //Anggota
         Route::get('anggota', [AnggotaController::class, 'index'])->name('anggota');
@@ -122,8 +130,7 @@ Route::group(['middleware' => 'admin'], function () {
     });
 });
 
-
-
+//Anggota
 Route::group(['middleware' => 'anggota'], function () {
     Route::prefix('anggota')->group(function () {
         Route::get('dashboard', [AnggotaDashboardController::class, 'index'])->name('dashboard.index');

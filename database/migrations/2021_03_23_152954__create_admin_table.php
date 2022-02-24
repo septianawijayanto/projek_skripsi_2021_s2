@@ -17,6 +17,7 @@ class CreateAdminTable extends Migration
             $table->id();
             $table->string('username')->unique();
             $table->string('password');
+            $table->enum('level', ['Admin', 'Kepsek']);
             $table->string('nama');
             $table->timestamps();
         });

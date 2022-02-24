@@ -6,8 +6,7 @@
 
         </div>
         <div class="panel-body">
-            <button type="button" style="background-color: pink" class="btn btn-xs btn-refresh"><i
-                    class="fa fa-refresh"></i></button>
+            <button type="button" class="btn btn-warning btn-xs btn-refresh"><i class="fa fa-refresh"></i></button>
         </div>
         <div class="panel-body">
             <div class="row">
@@ -35,7 +34,7 @@
                         <span style="background-color: yellowgreen;" class="icon"><i
                                 class="fa fa-user-circle-o"></i></span>
                         <p>
-                            <span class="number">{{ $anggota }}</span>
+                            <span class="number">{{ $staf }}</span>
                             <span class="title">Anggota Staf</span>
                         </p>
                     </div>
@@ -72,7 +71,6 @@
     </div>
 @endsection
 @section('scripts')
-
     <script>
         $("#Dashboard").addClass("active");
         $(document).ready(function() {

@@ -28,6 +28,7 @@
             <option value="">--Login Sebagai--</option>
             <option value="admin">Admin</option>
             <option value="anggota">Anggota</option>
+            <option value="admin">Kepsek</option>
         </select>
         <div class="form-group clearfix">
             <label class="fancy-checkbox element-left">
@@ -41,8 +42,6 @@
                     password?</a></span>
         </div>
     </form>
-
 @endsection
 @section('scripts')
-
 @endsection

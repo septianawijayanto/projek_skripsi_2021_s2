@@ -2,11 +2,15 @@
     <li><a href="{{ route('dashboard') }}" class=""><i class="lnr lnr-home nav-link" id="Dashboard"></i>
             <span>Dashboard</span></a></li>
     </li>
+
     <li>
         <a href="#data" data-toggle="collapse" class="collapsed"><i class="fa fa-database"></i> <span>Master
                 Data</span> <i class="icon-submenu lnr lnr-chevron-left"></i></a>
         <div id="data" class="collapse ">
             <ul class="nav">
+                @if (session::get('level') == 'Kepsek')
+                    <li><a href="{{ route('admin') }}"><i class="fa fa-circle-thin"></i> Admin</a></li>
+                @endif
                 <li><a href="{{ route('anggota') }}"><i class="fa fa-circle-thin"></i> Anggota</a></li>
                 <li><a href="{{ route('penerbit') }}" class=""><i class="fa fa-circle-thin"></i>
                         Penerbit</a></li>
@@ -14,7 +18,8 @@
                         Klasifikasi</a></li>
                 <li><a href="{{ route('e-book') }}" class=""><i class="fa fa-circle-thin"></i>
                         E-Book</a></li>
-                <li><a href="{{ route('buku') }}" class=""><i class="fa fa-circle-thin"></i> Buku</a>
+                <li><a href="{{ route('buku') }}" class=""><i class="fa fa-circle-thin"></i>
+                        Buku</a>
                 </li>
             </ul>
         </div>

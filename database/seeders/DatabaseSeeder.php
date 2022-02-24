@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Kepsek;
 use App\Models\Model\Admin;
 use App\Models\Model\Anggota;
 use App\Models\Model\Level;
@@ -20,8 +21,15 @@ class DatabaseSeeder extends Seeder
         $this->call(KlasifikasiSeeder::class);
         $this->call(PenerbitSeeder::class);
         Admin::create([
+            'nama' => 'Kepsek',
+            'username' => 'kepsek',
+            'level' => 'Kepsek',
+            'password' => \bcrypt('kepsek')
+        ]);
+        Admin::create([
             'nama' => 'Admin',
             'username' => 'admin',
+            'level' => 'Apkepdmin',
             'password' => \bcrypt('admin')
         ]);
         Level::create(['level' => 'Siswa']);

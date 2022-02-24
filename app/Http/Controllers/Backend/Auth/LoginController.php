@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Kepsek;
 use App\Models\Model\Admin;
 use App\Models\Model\Anggota;
 use Illuminate\Http\Request;
@@ -14,12 +15,14 @@ class LoginController extends Controller
 {
     public function index()
     {
-        $title="Login";
+        $title = "Login";
         if (Session::has('login_sebagai')) {
             if (Session::get('login_sebagai') == 'admin') {
                 return redirect('admin/dashboard');
-            } else {
+            } elseif (Session::get('login_sebagai') == 'anggota') {
                 return redirect('anggota/dashboard');
+            } else {
+                return redirect('kepsek/dashboard');
             }
         }
         return view('auth.login', compact('title'));
@@ -42,18 +45,19 @@ class LoginController extends Controller
                     Session::put('id', $data->id);
                     Session::put('nama', $data->nama);
                     Session::put('username', $data->username);
+                    Session::put('level', $data->level);
                     Session::put('login_sebagai', 'admin');
                     Session::put('login', TRUE);
                     return redirect('admin/dashboard')->with('sukses', 'Anda Berhasil Masuk Ke Sistem');
                 }
             }
             return redirect('login')->with('gagal', 'Username atau password salah !');
-        } else {
+        } elseif ($loginSebagai == 'anggota') {
             $data = Anggota::where('username', $username)->first();
             if ($data) {
                 if (Hash::check($password, $data->password)) {
                     Session::put('id', $data->id);
-                    Session::put('level_id',$data->level->level);
+                    Session::put('level_id', $data->level->level);
                     Session::put('nama', $data->nama);
                     Session::put('username' . $data->username);
                     Session::put('tgl_lahir', $data->tgl_lahir);
@@ -65,6 +69,19 @@ class LoginController extends Controller
                 }
             }
             return \redirect('login')->with('gagal', 'Username atau password salah !');
+        } else {
+            $data = Kepsek::where('username', $username)->first();
+            if ($data) { //apakah username tersebut ada atau tidak
+                if (Hash::check($password, $data->password)) {
+                    Session::put('id', $data->id);
+                    Session::put('nama', $data->nama);
+                    Session::put('username', $data->username);
+                    Session::put('login_sebagai', 'kepsek');
+                    Session::put('login', TRUE);
+                    return redirect('kepsek/dashboard')->with('sukses', 'Anda Berhasil Masuk Ke Sistem');
+                }
+            }
+            return redirect('login')->with('gagal', 'Username atau password salah !');
         }
     }
     public function cek_username(Request $request)

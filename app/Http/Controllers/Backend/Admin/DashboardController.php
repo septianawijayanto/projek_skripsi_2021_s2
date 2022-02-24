@@ -8,12 +8,18 @@ use App\Models\Model\Buku;
 use App\Models\Model\Level;
 use App\Models\Model\Transaksi;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        $title = 'Dashboard Admin';
+        if (Session::get('level') == 'Admin') {
+            $title = 'Dashboard Admin';
+        } else {
+            $title = 'Dashboard Kepsek';
+        }
+
 
 
         // $level = Level::get();
@@ -24,6 +30,6 @@ class DashboardController extends Controller
         $guru = Anggota::where('level_id', 2)->count();
         $staf = Anggota::where('level_id', 3)->count();
         $buku = Buku::count();
-        return view('admin.dashboard.index', compact('title', 'anggota', 'buku', 'pinjam', 'selesai', 'guru'));
+        return view('admin.dashboard.index', compact('title', 'staf', 'anggota', 'buku', 'pinjam', 'selesai', 'guru'));
     }
 }
