@@ -17,7 +17,7 @@ class DashboardController extends Controller
         if (Session::get('level') == 'Admin') {
             $title = 'Dashboard Admin';
         } else {
-            $title = 'Dashboard Kepsek';
+            $title = 'Dashboard Kepala Sekolah';
         }
 
 

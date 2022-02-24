@@ -47,9 +47,9 @@
                         </div>
 
                         <div class="form-group ">
-                            <label for="exampleFormControlInput1">Koda Anggota</label>
+                            <label for="exampleFormControlInput1">Kode Anggota</label>
                             <input name="kode_anggota" id="kode_anggota" required type="text" class="form-control"
-                                placeholder="Input Koda Anggota" value="">
+                                placeholder="Input Kode Anggota" value="">
                         </div>
                         <div class="form-group">
                             <label for="nama">Nama</label>
@@ -93,11 +93,8 @@
         </div>
     </div>
     <!-- AKHIR MODAL -->
-
 @endsection
 @section('scripts')
-
-
     <script type="text/javascript">
         $(document).ready(function() {
             $('#buku').select2({
@@ -294,6 +291,4 @@
 
         });
     </script>
-
-
 @endsection

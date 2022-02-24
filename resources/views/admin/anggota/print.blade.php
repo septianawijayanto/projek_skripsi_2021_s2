@@ -9,11 +9,12 @@
                     <th>No</th>
                     <th>Nama</th>
                     <th>Username</th>
+                    <th>Jenis Kelamin</th>
                     <th>Level</th>
+                    <th>Tempat Lahir</th>
                     <th>Tanggal Lahir</th>
+                    <th>No Hp</th>
                     <th>Alamat</th>
-                    <th>Agama</th>
-
                 </tr>
             </thead>
             <tbody>
@@ -22,10 +23,12 @@
                         <td>{{ $e + 1 }}</td>
                         <td>{{ $item->nama }}</td>
                         <td>{{ $item->username }}</td>
+                        <td>{{ $item->jk }}</td>
                         <td>{{ $item->level->level }}</td>
+                        <td>{{ $item->tempat_lahir }}</td>
                         <td>{{ $item->tgl_lahir }}</td>
+                        <td>{{ $item->no_hp }}</td>
                         <th>{{ $item->alamat }}</th>
-                        <td>{{ $item->agama }}</td>
 
                     </tr>
                 @endforeach

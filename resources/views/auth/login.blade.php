@@ -28,7 +28,7 @@
             <option value="">--Login Sebagai--</option>
             <option value="admin">Admin</option>
             <option value="anggota">Anggota</option>
-            <option value="admin">Kepsek</option>
+            <option value="admin">Kepala Sekolah</option>
         </select>
         <div class="form-group clearfix">
             <label class="fancy-checkbox element-left">

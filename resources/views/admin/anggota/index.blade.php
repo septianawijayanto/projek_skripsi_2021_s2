@@ -49,11 +49,6 @@
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="form-group ">
-                                    <label for="exampleFormControlInput1">Kode Anggota</label>
-                                    <input name="kode_anggota" id="kode_anggota" required type="text" readonly
-                                        class="form-control" placeholder="Input Kode Anggota" value="{{ $kode }}">
-                                </div>
-                                <div class="form-group ">
                                     <label for="exampleFormControlInput1">Nama</label>
                                     <input name="nama" id="nama" required type="text" class="form-control"
                                         placeholder="Input Nama" value="">
@@ -92,7 +87,7 @@
                                 <div class="form-group ">
                                     <label for="exampleFormControlInput1">Alamat</label>
                                     <textarea name="alamat" id="alamat" class="form-control" placeholder="Input Alamat"
-                                        rows="8"></textarea>
+                                        rows="4"></textarea>
                                 </div>
                                 <div class="form-group">
                                     <label for="agama">Jenis Kelamin</label>
@@ -260,6 +255,7 @@
                 $("#form-tambah-edit").validate({
                     submitHandler: function(form) {
                         var actionType = $('#tombol-simpan').val();
+
                         $('#tombol-simpan').html('Menyimpan ...');
 
                         $.ajax({

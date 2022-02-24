@@ -10,9 +10,15 @@
                     <th>Kode Buku</th>
                     <th>Judul Buku</th>
                     <th>Penulis</th>
+                    <th>Kelas</th>
+                    <th>Tahun Terbit</th>
+                    <th>Tahun Pengadaan</th>
                     <th>Penerbit</th>
                     <th>Klasifikasi</th>
                     <th>Jumlah</th>
+                    <th>Jumlah Dipinjam</th>
+                    <th>Rusak</th>
+                    <th>Hilang</th>
                 </tr>
             </thead>
             <tbody>
@@ -22,9 +28,15 @@
                         <td>{{ $item->kode }}</td>
                         <td>{{ $item->judul_buku }}</td>
                         <td>{{ $item->penulis }}</td>
+                        <td>{{ $item->kelas }}</td>
+                        <td>{{ $item->tahun_terbit }}</td>
+                        <td>{{ $item->tahun_pengadaan }}</td>
                         <td>{{ $item->penerbit->nama_penerbit }}</td>
                         <td>{{ $item->klasifikasi->nama_klasifikasi }}</td>
                         <td>{{ $item->jumlah }}</td>
+                        <td>{{ $item->jml_dipinjam }}</td>
+                        <td>{{ $item->rusak }}</td>
+                        <td>{{ $item->hilang }}</td>
                     </tr>
                 @endforeach
             </tbody>

@@ -14,28 +14,9 @@ class AnggotaController extends Controller
     {
         $title = 'Data Anggota';
 
-        $getRow = Anggota::orderBy('id', 'DESC')->get();
-        $rowCount = $getRow->count();
 
-        $lastId = $getRow->first();
-
-        $kode = "AG00001";
-
-        if ($rowCount > 0) {
-            if ($lastId->id < 9) {
-                $kode = "AG0000" . '' . ($lastId->id + 1);
-            } else if ($lastId->id < 99) {
-                $kode = "AG000" . '' . ($lastId->id + 1);
-            } else if ($lastId->id < 999) {
-                $kode = "AG00" . '' . ($lastId->id + 1);
-            } else if ($lastId->id < 9999) {
-                $kode = "AG0" . '' . ($lastId->id + 1);
-            } else {
-                $kode = "AG" . '' . ($lastId->id + 1);
-            }
-        }
         $level = Level::get();
-        return view('admin.anggota.index', compact('title', 'level', 'kode'));
+        return view('admin.anggota.index', compact('title', 'level'));
     }
     public function ajax(Request $request)
     {
@@ -62,11 +43,31 @@ class AnggotaController extends Controller
     }
     public function store(Request $request)
     {
+        $getRow = Anggota::orderBy('id', 'DESC')->get();
+        $rowCount = $getRow->count();
+
+        $lastId = $getRow->first();
+
+        $kode = "AG00001";
+
+        if ($rowCount > 0) {
+            if ($lastId->id < 9) {
+                $kode = "AG0000" . '' . ($lastId->id + 1);
+            } else if ($lastId->id < 99) {
+                $kode = "AG000" . '' . ($lastId->id + 1);
+            } else if ($lastId->id < 999) {
+                $kode = "AG00" . '' . ($lastId->id + 1);
+            } else if ($lastId->id < 9999) {
+                $kode = "AG0" . '' . ($lastId->id + 1);
+            } else {
+                $kode = "AG" . '' . ($lastId->id + 1);
+            }
+        }
         $id = $request->id;
         $post = Anggota::updateOrCreate(
             ['id' => $id],
             [
-                'kode_anggota' => $request->kode_anggota,
+                'kode_anggota' => $kode,
                 'nama' => $request->nama,
                 'username' => $request->username,
                 'level_id' => $request->level_id,
